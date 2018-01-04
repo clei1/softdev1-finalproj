@@ -16,4 +16,20 @@ Login Page
 <h1>
   Login
 </h1>
+
+<form method="POST" action ="/login">
+  Enter your username:<br>
+  <input type="text" name="username" required><br><br>
+
+  Enter your password: <br>
+  <input type="password" name="password" required><br><br>
+
+  <input type="submit" value="Login"> <br> <br>
+</form>
+
+<form method="GET" action = "/register">
+  Don't have an account?
+  <input type="submit" value = "Register">
+</form>
+
 {% endblock content %}

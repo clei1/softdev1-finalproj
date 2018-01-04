@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 import os, csv, sqlite3, hashlib
-from utils.db_func import *
+#from utils.db_func import *
 
 my_app = Flask(__name__)
 my_app.secret_key = os.urandom(32)
@@ -15,19 +15,21 @@ def main():
 
 @my_app.route('/login')
 def login():
-    return render_template('login.html')
     if 'user' in session:
-        logged_in()
+        return redirect(url_for('main'))
+    elif request.method == 'GET':
+        return render_template('login.html')
     else:
-        login_form()
+        #validate credentials
 
 @my_app.route('/register')
 def register():
-    return render_template('register.html')
     if 'user' in session:
-        logged_in()
+        return redirect(url_for('main'))
+    elif request.method == 'GET':
+        return render_template('register.html')
     else:
-        register_form()
+        #validate credentials
 
 @my_app.route('/play')
 def play():
