@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head {% block html_attribs %}{% endblock html_attribs %}>
+    <title>{% block title %}{% endblock title %} </title>
+    {% block styles %}{% endblock styles %}
+    {% block scripts %}{% endblock scripts %}
+  </head>
+
+  <body>
+
+    <div id="content">
+      {% block content %}{% endblock %}
+    </div>
+    
+  </body>
+
+</html>

@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block html_attribs %}
+lang="en"
+{% endblock html_attribs %}
+
+{% block title %}
+Main Page
+{% endblock title %}
+
+{% block head %}
+{{ super() }}
+{% endblock head %}
+
+{% block content %}
+
+{% block create %}
+<div id="create">
+  <p>Create a game!</p>
+</div>
+{% endblock create %}
+
+{% block join %}
+<div id="join">
+  <p>Join a game!</p>
+</div>
+{% endblock join %}
+
+{% block view %}
+<div id="view">
+  <p>View finished game stats!</p>
+</div>
+{% endblock view %}
+
+{% endblock content %}
+
