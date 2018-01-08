@@ -8,11 +8,20 @@ def tables():
     users = "CREATE TABLE IF NOT EXISTS users(user TEXT, password TEXT)"
     c.execute(users)
 
-    games = "CREATE TABLE IF NOT EXISTS games(gameID INTEGER, user TEXT,  score INTEGER, dictator BOOLEAN, cards TEXT)"
+    games = "CREATE TABLE IF NOT EXISTS games(gameID INTEGER, user TEXT, score INTEGER, dictator BOOLEAN)"
     c.execute(games)
 
-    decks = "CREATE TABLE IF NOT EXISTS decks(gameID INTEGER, white TEXT, black TEXT, onBoard TEXT)"
-    c.execute(decks)
+    userCards = "CREATE TABLE IF NOT EXISTS userCards(gameID INTEGER, user TEXT, card TEXT)"
+    c.execute(userCards)
+
+    whiteDecks = "CREATE TABLE IF NOT EXISTS whiteDecks(gameID INTEGER, card TEXT)"
+    c.execute(whiteDecks)
+
+    blackDecks = "CREATE TABLE IF NOT EXISTS blackDecks(gameID INTEGER, card TEXT)"
+    c.execute(blackDecks)
+
+    cardsOnBoard = "CREATE TABLE IF NOT EXISTS cardsOnBoard(gameID INTEGER, user TEXT, card TEXT)"
+    c.execute(cardsOnBoard)
 
 tables()
 
