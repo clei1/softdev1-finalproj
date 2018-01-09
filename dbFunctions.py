@@ -43,7 +43,7 @@ def addGame(user, whites, blacks):
     db = sqlite3.connect(f)
     c = db.cursor()
     id = newGameID()
-    c.execute("INSERT INTO games VALUES('%s', '%s', '%s', '%s')" % (id, user, 0, 1))
+    c.execute("INSERT INTO games VALUES('%s', '%s', '%s', '%s', '%s')" % (id, user, 0, 1, 0))
     for each in whites:
         c.execute("INSERT INTO whiteDecks VALUES('%s', '%s')" % (id, each))
     for each in blacks:
@@ -55,7 +55,7 @@ def addGame(user, whites, blacks):
 def addPlayer(gameID, user):
     db = sqlite3.connect(f)
     c = db.cursor()
-    c.execute("INSERT INTO games VALUES('%s', '%s', '%s', '%s')" % (gameID, user, 0, 0))
+    c.execute("INSERT INTO games VALUES('%s', '%s', '%s', '%s', '%s')" % (gameID, user, 0, 0, 0))
     db.commit()
     db.close()
 
@@ -90,13 +90,15 @@ def chooseCardToPlay(gameID,user,card):
     db.commit()
     db.close()
 
+    
 #given a winning card, finds player who played it, updates their score, clears cardsOnBoard for that game, calls newDictator function
 def chooseWinner(gameID, card):
     db = sqlite3.connect(f)
     c = db.cursor()
     player = c.execute("SELECT * FROM cardsOnBoard WHERE gameID = '%s' AND card = '%s'" % (gameID, card)).fetchall()[0][1]
     score = c.execute("SELECT * FROM games WHERE gameID = '%s' AND user = '%s'" % (gameID, player)).fetchall()[0][2]
-    c.execute("UPDATE games SET score = '%s' WHERE gameID = '%s' and user = '%s'" % (score+1, gameID, player))
+    c.execute("UPDATE games SET score = '%s' WHERE gameID = '%s' AND user = '%s'" % (score+1, gameID, player))
+    c.execute("UPDATE games SET roundDone = 1 WHERE gameID = '%s'" % (gameID))
     c.execute("DELETE FROM cardsOnBoard WHERE gameID = '%s'" % (gameID))
     #newDictator(gameID)
     db.commit()
@@ -114,7 +116,23 @@ def playedCard(gameID):
 
 #sets next player as dictator
 #def newDictator(gameID):
-    
+
+#returns cards of user
+#def cardsInDeck(user):
+
+#gameEnded?
+
+
+
+#returns if winner has been chosen
+def winnerChosen(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    bool = c.execute("SELECT * FROM games WHERE gameID = '%s'" % (gameID)).fetchall()[0][4]
+    c.execute("UPDATE games SET roundDone = '%s' WHERE gameID = '%s'" % (0, gameID))
+    db.commit()
+    db.close()
+    return bool
     
 #addUser("Jim","password")
 #addUser("Bob","password")
@@ -125,10 +143,12 @@ def playedCard(gameID):
 #drawBlack(0, "Jim")
 #drawWhite(0, "Bob")
 #drawWhite(0, "Mary")
-#chooseCardToPlay(0,"Bob","d")
+#chooseCardToPlay(0,"Bob","b")
 #chooseCardToPlay(0,"Mary","c")
 #print playedCard(0)
-#chooseWinner(0,"c")
+
+chooseWinner(0,"b")
+print winnerChosen(0)
 db = sqlite3.connect(f)
 c = db.cursor()
 c.execute("SELECT * FROM userCards")
