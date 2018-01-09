@@ -88,34 +88,49 @@ def chooseCardToPlay(gameID,user,card):
     c.execute("DELETE FROM userCards WHERE gameID = '%s' AND user = '%s' AND card = '%s'" % (gameID, user, card))
     c.execute("INSERT INTO cardsOnBoard VALUES('%s','%s','%s')" % (gameID, user, card))
     db.commit()
-    db.close
+    db.close()
 
 #given a winning card, finds player who played it, updates their score, clears cardsOnBoard for that game, calls newDictator function
 def chooseWinner(gameID, card):
     db = sqlite3.connect(f)
     c = db.cursor()
     player = c.execute("SELECT * FROM cardsOnBoard WHERE gameID = '%s' AND card = '%s'" % (gameID, card)).fetchall()[0][1]
-    print player
     score = c.execute("SELECT * FROM games WHERE gameID = '%s' AND user = '%s'" % (gameID, player)).fetchall()[0][2]
-    print score+1
     c.execute("UPDATE games SET score = '%s' WHERE gameID = '%s' and user = '%s'" % (score+1, gameID, player))
     c.execute("DELETE FROM cardsOnBoard WHERE gameID = '%s'" % (gameID))
     #newDictator(gameID)
-    db.commit
-    db.close
+    db.commit()
+    db.close()
+
+#determines if everyone has played a card
+def playedCard(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    players = c.execute("SELECT count(*) FROM games WHERE gameID = '%s'" % (gameID)).fetchall()
+    cards = c.execute("SELECT count(*) FROM cardsOnBoard WHERE gameID = '%s'" % (gameID)).fetchall()
+    db.commit()
+    db.close()
+    return players[0][0] == cards[0][0]
 
 #sets next player as dictator
 #def newDictator(gameID):
     
     
 #addUser("Jim","password")
-#addGame("Jim",['a','b','c'],['a','b','c'])
+#addUser("Bob","password")
+#addUser("Mary","password")
+#addGame("Jim",['a','b','c','d'],['e','f','g','h'])
 #addPlayer(0, "Bob")
-#drawBlack(0,"Jim")
-#chooseCardToPlay(0,"Jim","b")
-chooseWinner(0,"c")
+#addPlayer(0, "Mary")
+#drawBlack(0, "Jim")
+#drawWhite(0, "Bob")
+#drawWhite(0, "Mary")
+#chooseCardToPlay(0,"Bob","d")
+#chooseCardToPlay(0,"Mary","c")
+#print playedCard(0)
+#chooseWinner(0,"c")
 db = sqlite3.connect(f)
 c = db.cursor()
-c.execute("SELECT * FROM games")
+c.execute("SELECT * FROM userCards")
 data = c.fetchall()
 print(data)
