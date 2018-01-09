@@ -2,7 +2,7 @@ import sqlite3, random
 f = "data/game.db"
 
 #validate 
-def validate(username, password):
+def validate(user, password):
     db = sqlite3.connect(f)
     c = db.cursor()
     found = c.execute("SELECT count(*) FROM users WHERE user = '%s' AND password = '%s'" % (user, password)).fetchall()
