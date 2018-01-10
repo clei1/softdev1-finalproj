@@ -39,12 +39,16 @@ def register():
 def main():
     if 'user' not in session:
         return redirect(url_for('login'))
-    return render_template('main.html')
+    return render_template('main.html', user = session['user'])
 
 @my_app.route('/create', methods=['GET','POST'])
 def create():
     if 'user' not in session:
         return redirect(url_for('login'))
+    if request.method == 'POST':
+        print request.form['scorelim']
+        print request.form['playerlim']
+        #createGame()
     return render_template('create.html')
 
 @my_app.route('/play', methods=['GET','POST'])
@@ -53,6 +57,12 @@ def play():
     if 'user' not in session:
         return redirect(url_for('login'))
     return render_template('play.html')
+
+@my_app.route('/logout', methods=['GET','POST'])
+def logout():
+    if 'user' in session:
+        session.pop('user')
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
 	my_app.run(debug = True)

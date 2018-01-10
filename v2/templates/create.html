@@ -12,11 +12,13 @@ Main Page
 
 {% block content %}
 
-{% block create %}
 <div id="create">
-  <p>Create a game!</p>
+  <form action="/create" method="POST">
+    Score limit:<input type="number" name="scorelim">
+    Player limit:<input type="number" name="playerlim">
+    <button type="submit">Create game!</button>
+  </form>
 </div>
-{% endblock create %}
 
 {% endblock content %}
 
