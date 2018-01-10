@@ -118,11 +118,18 @@ def playedCard(gameID):
 #def newDictator(gameID):
 
 #returns cards of user
-#def cardsInDeck(user):
+def cardsInDeck(gameID, user):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    cards = []
+    lines = c.execute("SELECT * FROM userCards WHERE gameID = '%s' AND user = '%s'" % (gameID, user)).fetchall()
+    db.commit()
+    db.close()
+    for each in lines:
+        cards.append(each[2])
+    return cards
 
 #gameEnded?
-
-
 
 #returns if winner has been chosen
 def winnerChosen(gameID):
@@ -147,10 +154,10 @@ def winnerChosen(gameID):
 #chooseCardToPlay(0,"Mary","c")
 #print playedCard(0)
 
-chooseWinner(0,"b")
-print winnerChosen(0)
+#chooseWinner(0,"b")
+#print winnerChosen(0)
 db = sqlite3.connect(f)
 c = db.cursor()
 c.execute("SELECT * FROM userCards")
 data = c.fetchall()
-print(data)
+#print(data)
