@@ -154,10 +154,10 @@ def winnerChosen(gameID):
 #chooseCardToPlay(0,"Mary","c")
 #print playedCard(0)
 
-chooseWinner(0,"b")
-print winnerChosen(0)
+#chooseWinner(0,"b")
+#print winnerChosen(0)
 db = sqlite3.connect(f)
 c = db.cursor()
 c.execute("SELECT * FROM userCards")
 data = c.fetchall()
-print(data)
+#print(data)
