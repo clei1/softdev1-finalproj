@@ -20,12 +20,79 @@ Main Page
   </form>
 </div>
 
-<div id="join">
-  <p>Join a game!</p>
+<div id="play">
+  <div id="joined">
+    <h1>Your Current Games</h1>
+    {# PUT THIS IN FOR LOOP #}
+    <div class="game">
+      <form action="/play" method="POST">
+	<button type="submit" name="gameID" value="1">
+	  <b>person's game (6/8)</b>
+	  <br>
+	  <b>Players:</b>chan_cong_ching, Nut, Waddles, Random, MaxiLike, KnifeMan, you
+	  <br>
+	  <b>Goal:</b>69
+
+	  PLAY
+	</button>
+      </form>
+    </div>
+    <br>
+    {# PUT THIS IN FOR LOOP #}
+  </div>
+
+  <div id="join">
+    <h1>Possible Games</h1>
+    {# PUT THIS IN FOR LOOP #}
+    <div class="game">
+      <form action="/play" method="POST">
+	<button type="submit" name="gameID" value="1">
+	  <b>person's game (7/8)</b>
+	  <br>
+	  <b>Players:</b>chan_cong_ching, Nut, Waddles, Random, MaxiLike, KnifeMan, Rash, Xyzzzy
+	  <br>
+	  <b>Goal:</b>6
+	  JOIN
+	</button>
+      </form>
+    </div>
+    <br>
+    {# PUT THIS IN FOR LOOP #}
+  </div>
 </div>
 
 <div id="view">
-  <p>View finished game stats!</p>
+  <h1>Finished Games</h1>
+  
+  {# PUT THIS IN FOR LOOP #}
+  <div class="game">
+    <form action="/view" method="POST">
+      <button type="submit" name="gameID" value="1">
+	<b>person's game (8/8)</b>
+	<br>
+	<b>Players:</b>chan_cong_ching, Nut, Waddles, Random, MaxiLike, KnifeMan, Rash, Xyzzzy
+	<br>
+	<b>Goal:</b>69
+	View stats
+      </button>
+    </form>
+  </div>
+  <br>
+  {# END OF THE FOR LOOP STUFF #}
+  
+  <div class="game">
+    <form action="/view" method="POST">
+      <button type="submit" name="gameID" value="1">
+	<b>person's game (8/8)</b>
+	<br>
+	<b>Players:</b>chan_cong_ching, Nut, Waddles, Random, MaxiLike, KnifeMan, Rash, Xyzzzy
+	<br>
+	<b>Goal:</b>69
+	View stats
+      </button>
+    </form>
+  </div>
+  <br>
 </div>
 
 {% endblock content %}

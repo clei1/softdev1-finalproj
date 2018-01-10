@@ -47,6 +47,13 @@ def create():
         return redirect(url_for('login'))
     return render_template('create.html')
 
+@my_app.route('/play', methods=['GET','POST'])
+def play():
+    print request.form
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    return render_template('play.html')
+
 if __name__ == '__main__':
 	my_app.run(debug = True)
 
