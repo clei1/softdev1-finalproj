@@ -8,9 +8,12 @@ lang="en"
 Main Page
 {% endblock title %}
 
+{% block styles %}
+<LINK href="../static/style.css" rel="stylesheet" type="text/css">
+{% endblock styles %}
+
 {% block scripts %}
-ADD THE SCRIPT THAT GETS ELEMENTS, ADDSS WHITE CARDS TO PAGE
-w/ getelementbyid, attachhcild something like that
+{# ADD THE SCRIPT THAT GETS ELEMENTS, ADDS WHITE CARDS TO PAGE w/ getelementbyid, attachhcild something like that #}
 {% endblock scripts %}
 
 {% block head %}
@@ -25,60 +28,81 @@ w/ getelementbyid, attachhcild something like that
   </form>
 </div>
 
+<br>
+
 <div id="blackcard">
   The black card for this round is:
-  <div id="inside">
-    <h2>
-      Dear Leader Kim, our village praises with a humble offering of __.
-    </h2>
+  <div id="inside" style="background-color:#000000">
+    <span style="color:#FFFFFF"><h3>  __. High five, bro.</h3></span>
   </div>
 </div>
 
+<br>
 <br>
 
 {# this is dictator #}
 {% if not dictator %}
+The white cards played this round are:
 <div id="playedcards">
-  The white cards played this round are:
   {# THIS NEEDS TO BE IN FOR LOOP #}
   <div class="played">
-    <p>Serfdom.</p>
+    Serfdom.
   </div>
   {# END #}
   <div class="played">
-    <p>All my friends dying.</p>
+    All my friends dying.
+  </div>
+  <div class="played">
+    A mouthful of potato salad.
+  </div>
+  <div class="played">
+    A magic hippie love cloud.
+  </div>
+  <div class="played">
+    A bowl of gourds.
+  </div>
+  <div class="played">
+    Life.
+  </div>
+  <div class="played">
+    Yeast.
+  </div>
+  <div class="played">
+    Strawberry.
+  </div>
+  <div class="played">
+    Apples.
   </div>
 </div>
 
-<br>
-<p>----------</p>
+Your cards:
 <div id="cards">
   {# THIS NEEDS TO BE IN FOR LOOP #}
-  <div class="userscards">
+  <div class="played">
     <p>Serfdom.</p>
   </div>
   {# THIS NEEDS TO BE IN FOR LOOP #}
-  <div class="userscards">
+  <div class="played">
     <p>Serfdom.</p>
   </div>
-  <div class="userscards">
+  <div class="played">
     <p>Serfdom.</p>
   </div>
 </div>
 {% endif %}
 
+<div>
+
+</div>
 {# this is not dictator #}
 {% if dictator %}
 <div id="playedcards">
   The white cards played this round are:
   {# THIS NEEDS TO BE IN FOR LOOP #}
   <div class="played">
-    <p>Serfdom.</p>
+    Serfdom.
   </div>
   {# END #}
-  <div class="played">
-    <p></p>
-  </div>
 </div>
 {% endif %}
 

@@ -1,0 +1,6 @@
+.played {
+    max-width:10%;
+    height:40px;
+    border: 2px solid black;
+    display:inline-block
+}
