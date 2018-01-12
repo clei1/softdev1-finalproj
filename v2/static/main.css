@@ -1,0 +1,30 @@
+body {
+    margin:0;
+    background-color: #EDEDED;
+}
+
+#bar {
+    background-color: #555555;
+    height: 24px;
+    border: 3px solid #555555;
+}
+
+#content {
+    background-color: #EDEDED;
+    
+}
+
+.barbutton {
+    float: left
+}
+
+#logout {
+    float: right
+}
+
+#game {
+    width: 45%;
+    border: 3px solid grey;
+    background-color: white;
+}
+
