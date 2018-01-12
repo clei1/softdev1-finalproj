@@ -1,5 +1,13 @@
 import sqlite3, random
-f = "data/game.db"
+f = "../data/game.db"
+
+with open("blackcards.txt") as fb:
+    blacks = fb.readlines()
+blacks = [x.strip() for x in blacks]
+
+with open("whitecards.txt") as fb:
+    whites = fb.readlines()
+whites = [x.strip() for x in whites] 
 
 #validate 
 def validate(user, password):
@@ -39,7 +47,7 @@ def addUser(user, password):
     db.close()
 
 #adds user who created to games with new gameID and sets user to dictator; adds white and black decks with gameID
-def addGame(user, whites, blacks):
+def addGame(user):
     db = sqlite3.connect(f)
     c = db.cursor()
     id = newGameID()
@@ -129,9 +137,36 @@ def cardsInDeck(gameID, user):
         cards.append(each[2])
     return cards
 
-#gameEnded?
+#returns boolean to check if game is over
+def gameEnded(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    count = c.execute("SELECT count(*) FROM games WHERE gameID = '%s' AND score = '%s'" % (gameID, 20)).fetchall()[0][0]
+    db.commit()
+    db.close()
+    print count
+    return count > 0
 
-#returns if winner has been chosen
+#way to stop game when someone get certain amount of points
+
+#checks to see if enough people joined game
+def enoughPeople(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    count = c.execute("SELECT count(*) FROM games WHERE gameID = '%s'" % (gameID)).fetchall()[0][0]
+    db.commit()
+    db.close()
+    return count == 4
+
+#checks to see if game is full
+
+
+
+#way to read cards on text file  and put them in a list
+
+
+
+#returns if winner has been chosen for the round
 def winnerChosen(gameID):
     db = sqlite3.connect(f)
     c = db.cursor()
@@ -139,25 +174,26 @@ def winnerChosen(gameID):
     c.execute("UPDATE games SET roundDone = '%s' WHERE gameID = '%s'" % (0, gameID))
     db.commit()
     db.close()
-    return bool
+    return bool == 1
     
 #addUser("Jim","password")
 #addUser("Bob","password")
 #addUser("Mary","password")
-#addGame("Jim",['a','b','c','d'],['e','f','g','h'])
+#addGame("Jim")
 #addPlayer(0, "Bob")
-#addPlayer(0, "Mary")
+#addPlayer(0, "Sam")
 #drawBlack(0, "Jim")
 #drawWhite(0, "Bob")
-#drawWhite(0, "Mary")
-#chooseCardToPlay(0,"Bob","b")
+#drawWhite(0, "Bob")
+#chooseCardToPlay(0,"Bob","A foul mouth.")
 #chooseCardToPlay(0,"Mary","c")
 #print playedCard(0)
-
-#chooseWinner(0,"b")
+#print cardsInDeck(0,"Bob")
+#chooseWinner(0,"A foul mouth.")
 #print winnerChosen(0)
+print enoughPeople(0)
 db = sqlite3.connect(f)
 c = db.cursor()
-c.execute("SELECT * FROM userCards")
+c.execute("SELECT * FROM games")
 data = c.fetchall()
 #print(data)

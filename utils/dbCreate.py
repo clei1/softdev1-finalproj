@@ -1,6 +1,6 @@
 import sqlite3, hashlib
 
-f = "data/game.db"
+f = "../data/game.db"
 db = sqlite3.connect(f)
 c = db.cursor()
 
@@ -17,7 +17,7 @@ def tables():
     whiteDecks = "CREATE TABLE IF NOT EXISTS whiteDecks(gameID INTEGER, card TEXT)"
     c.execute(whiteDecks)
 
-    blackDecks = "CREATE TABLE IF NOT EXISTS blackDecks(gameID INTEGER, card TEXT)"
+    blackDecks = "CREATE TABLE IF NOT EXISTS blackDecks(gameID INTEGER, card BLOB)"
     c.execute(blackDecks)
 
     cardsOnBoard = "CREATE TABLE IF NOT EXISTS cardsOnBoard(gameID INTEGER, user TEXT, card TEXT)"
