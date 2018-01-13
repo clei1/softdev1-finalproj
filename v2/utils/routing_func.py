@@ -3,6 +3,7 @@ import hashlib
 from db_func import *
 
 def loggedin():
+    print session
     return "user" in session
 
 def vald():

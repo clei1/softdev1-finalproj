@@ -22,13 +22,15 @@ Main Page
 
 {% block content %}
 
+
 <div id="leave">
   <form action="/main" method="GET">
-    <button type="submit">Leave Game</button>
+    <button type="submit">Go back</button>
   </form>
 </div>
 
 <br>
+{% if playable %}
 
 <div id="blackcard">
   The black card for this round is:
@@ -36,9 +38,6 @@ Main Page
     <span style="color:#FFFFFF"><h3>  __. High five, bro.</h3></span>
   </div>
 </div>
-
-<br>
-<br>
 
 {# this is dictator #}
 {% if not dictator %}
@@ -105,7 +104,7 @@ Your cards:
   {# END #}
 </div>
 {% endif %}
-
+{% endif %}
 
 
 {% endblock content %}

@@ -9,11 +9,6 @@ body {
     border: 3px solid #555555;
 }
 
-#content {
-    background-color: #EDEDED;
-    
-}
-
 .barbutton {
     float: left
 }
@@ -22,9 +17,27 @@ body {
     float: right
 }
 
-#game {
+.game {
+    background-color: rgb(253, 253, 253);
     width: 45%;
-    border: 3px solid grey;
-    background-color: white;
+    border-radius: 3px;
+    border: 1px solid rgb(204,204,204);
+    height: 100px;
+    padding-top: 10px;
+    padding-left: 10px;
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px;
 }
 
+p {
+    margin: 0px;
+}
+
+.title{
+    font-weight: bold;
+    font-family: sans-serif;
+    font-size: large;
+}
+
+.

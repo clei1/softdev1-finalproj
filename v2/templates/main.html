@@ -8,104 +8,107 @@ lang="en"
 Main Page
 {% endblock title %}
 
+{% block scripts %}
+{{ super() }}
+{% endblock scripts %}
+
+{% block styles %}
+<link href="../static/main.css" rel="stylesheet" type="text/css">
+{% endblock styles %}
+
 {% block head %}
 {{ super() }}
 {% endblock head %}
 
-{% block content %}
-<div id="bar">
-  <div id="profile">
-    <p>{{user}}</p>
-  </div>
-  
-  <div id="create">
-    <form action="/create" method="GET">
-      <button type="submit">Create Game</button>
-    </form>
-  </div>
+{% block bar %}
 
-  <div id="logout">
-    <form action="/logout" method="GET">
-      <button type="submit">Log out</button>
-    </form>
-  </div>
-  
+<div class="barbutton">
+  <button type="submit" class="button button-rounded-hover">Current Games</button>
 </div>
 
-<div id="play">
-  <div id="joined">
-    <h1>Your Current Games</h1>
-    {# PUT THIS IN FOR LOOP #}
-    <div class="game">
-      <form action="/play" method="POST">
-	<button type="submit" name="gameID" value="1">
-	  <b>person's game (6/8)</b>
-	  <br>
-	  <b>Players:</b>chan_cong_ching, Nut, Waddles, Random, MaxiLike, KnifeMan, you
-	  <br>
-	  <b>Goal:</b>69
+<div class="barbutton">
+  <button type="submit" class="button button-rounded-hover">Joinable Games</button>
+</div>
 
+<div class="barbutton">
+  <form action="/create" method="GET">
+    <button type="submit" class="button button-rounded-hover">Create Game</button>
+  </form>
+</div>
+
+<div class="barbutton">
+  <button type="submit" class="button button-rounded-hover">Finished Games</button>
+</div>
+
+<div class="barbutton" id="logout">
+  <form action="/logout" method="GET">
+    <button type="submit" class="button button-rounded-hover">Log out</button>
+  </form>
+</div>
+
+{% endblock bar %}
+
+{% block content %}
+<div id="games">
+  
+  <div id="current">
+    {% for g in current %}
+    <div class="game">
+      <p>
+	<div class="title">
+	  {{ g.player }}'s Game ({{ g.current }}/{{ g.total }})
+	</div>
+	<b>Players:</b>{{ g.players }}<br>
+	<b>Goal:</b>{{ g.goal }}
+      </p>
+      <form action="/play" method="POST">
+	<button class="g"  type="submit" name="gameID" value={{ g.id }}>
 	  PLAY
 	</button>
       </form>
     </div>
-    <br>
-    {# PUT THIS IN FOR LOOP #}
+    {% endfor %}
   </div>
 
   <div id="join">
-    <h1>Possible Games</h1>
-    {# PUT THIS IN FOR LOOP #}
+    {% for g in join %}
     <div class="game">
+      <p>
+	<div class="title">
+	  {{ g.player }}'s Game ({{ g.current }}/{{ g.total }})
+	</div>
+	<b>Players:</b> {{ g.players }}<br>
+	<b>Goal:</b> {{ g.goal }}
+      </p>
       <form action="/play" method="POST">
-	<button type="submit" name="gameID" value="1">
-	  <b>person's game (7/8)</b>
-	  <br>
-	  <b>Players:</b>chan_cong_ching, Nut, Waddles, Random, MaxiLike, KnifeMan, Rash, Xyzzzy
-	  <br>
-	  <b>Goal:</b>6
+	<button class="g"  type="submit" name="gameID" value={{ g.id }}>
 	  JOIN
 	</button>
       </form>
     </div>
-    <br>
-    {# PUT THIS IN FOR LOOP #}
+    {% endfor %}
   </div>
+
+  <div id="finished">
+    {% for g in finished %}
+    <div class="game">
+      <p>
+	<div class="title">
+	  {{ g.player }}'s Game ({{ g.current }}/{{ g.total }})
+	</div>
+	<b>Players:</b> {{ g.players }}<br>
+	<b>Goal:</b> {{ g.goal }}
+      </p>
+      <form action="/view" method="POST">
+	<button class="g" type="submit" name="gameID" value={{ g.id }}>
+	  VIEW STATS
+	</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  
 </div>
 
-<div id="view">
-  <h1>Finished Games</h1>
-  
-  {# PUT THIS IN FOR LOOP #}
-  <div class="game">
-    <form action="/view" method="POST">
-      <button type="submit" name="gameID" value="1">
-	<b>person's game (8/8)</b>
-	<br>
-	<b>Players:</b>chan_cong_ching, Nut, Waddles, Random, MaxiLike, KnifeMan, Rash, Xyzzzy
-	<br>
-	<b>Goal:</b>69
-	View stats
-      </button>
-    </form>
-  </div>
-  <br>
-  {# END OF THE FOR LOOP STUFF #}
-  
-  <div class="game">
-    <form action="/view" method="POST">
-      <button type="submit" name="gameID" value="1">
-	<b>person's game (8/8)</b>
-	<br>
-	<b>Players:</b>chan_cong_ching, Nut, Waddles, Random, MaxiLike, KnifeMan, Rash, Xyzzzy
-	<br>
-	<b>Goal:</b>69
-	View stats
-      </button>
-    </form>
-  </div>
-  <br>
-</div>
-</div>
 {% endblock content %}
 

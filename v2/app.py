@@ -12,7 +12,7 @@ def root():
 
 @my_app.route('/login', methods=['GET','POST'])
 def login():
-    if loggedin():
+    if 'user' in session:
         return redirect(url_for('main'))
     if request.method == 'POST':
         if vald():
@@ -39,16 +39,21 @@ def register():
 def main():
     if 'user' not in session:
         return redirect(url_for('login'))
-    return render_template('main.html', user = session['user'])
+    return render_template('main.html',
+                           current=[{"player":"Player", "current":2, "total":4, "players":"Player, hi", "goal":10 },
+                                    {"player":"hi", "current":4, "total":8, "players":"Player1, Player2, Player3, hi", "goal":17 }],
+                           join=[{"player":"Player2", "current":3, "total":5, "players":"Player2, gdfg, ter", "goal":23 },
+                                 {"player":"Player3", "current":1, "total":6, "players":"Player3"}],
+                           finished=[{"player":"Player5", "current":4, "total":4, "players":"Player5, hi, yt, gf", "goal":14 },
+                                     {"player":"Player1", "current":4, "total":4, "players":"Player1, hi, gfe, as", "goal":9 }])
 
 @my_app.route('/create', methods=['GET','POST'])
 def create():
     if 'user' not in session:
         return redirect(url_for('login'))
     if request.method == 'POST':
-        print request.form['scorelim']
-        print request.form['playerlim']
-        #createGame()
+        addGame(session['user'])
+        return redirect(url_for())
     return render_template('create.html')
 
 @my_app.route('/play', methods=['GET','POST'])
@@ -56,7 +61,7 @@ def play():
     print request.form
     if 'user' not in session:
         return redirect(url_for('login'))
-    return render_template('play.html')
+    return render_template('play.html', playable = True)
 
 @my_app.route('/logout', methods=['GET','POST'])
 def logout():
