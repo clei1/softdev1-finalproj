@@ -22,90 +22,34 @@ Main Page
 
 {% block content %}
 
-
 <div id="leave">
   <form action="/main" method="GET">
     <button type="submit">Go back</button>
   </form>
 </div>
 
-<br>
-{% if playable %}
-
+The black card for this round is:
 <div id="blackcard">
-  The black card for this round is:
-  <div id="inside" style="background-color:#000000">
-    <span style="color:#FFFFFF"><h3>  __. High five, bro.</h3></span>
-  </div>
+  {{blackCard}}
 </div>
 
-{# this is dictator #}
-{% if not dictator %}
 The white cards played this round are:
 <div id="playedcards">
-  {# THIS NEEDS TO BE IN FOR LOOP #}
-  <div class="played">
-    Serfdom.
+  {% for c in cards %}
+  <div class="played" {% if dictator %} onclick="" {% endif %}>
+    {% if dictator or yourcard %}{{c}}{% endif %}
   </div>
-  {# END #}
-  <div class="played">
-    All my friends dying.
-  </div>
-  <div class="played">
-    A mouthful of potato salad.
-  </div>
-  <div class="played">
-    A magic hippie love cloud.
-  </div>
-  <div class="played">
-    A bowl of gourds.
-  </div>
-  <div class="played">
-    Life.
-  </div>
-  <div class="played">
-    Yeast.
-  </div>
-  <div class="played">
-    Strawberry.
-  </div>
-  <div class="played">
-    Apples.
-  </div>
+  {% endfor %}
 </div>
 
 Your cards:
-<div id="cards">
-  {# THIS NEEDS TO BE IN FOR LOOP #}
-  <div class="played">
-    <p>Serfdom.</p>
+<div id="whitecards">
+  {% for w in whitecards %}
+  <div class="white" {% if not dictator %} onclick="" {% endif %}>
+    {{w}}
   </div>
-  {# THIS NEEDS TO BE IN FOR LOOP #}
-  <div class="played">
-    <p>Serfdom.</p>
-  </div>
-  <div class="played">
-    <p>Serfdom.</p>
-  </div>
+  {% endfor %}
 </div>
-{% endif %}
-
-<div>
-
-</div>
-{# this is not dictator #}
-{% if dictator %}
-<div id="playedcards">
-  The white cards played this round are:
-  {# THIS NEEDS TO BE IN FOR LOOP #}
-  <div class="played">
-    Serfdom.
-  </div>
-  {# END #}
-</div>
-{% endif %}
-{% endif %}
-
 
 {% endblock content %}
 
