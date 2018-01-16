@@ -47,11 +47,11 @@ def addUser(user, password):
     db.close()
 
 #adds user who created to games with new gameID and sets user to dictator; adds white and black decks with gameID
-def addGame(user):
+def addGame(user, total, goal):
     db = sqlite3.connect(f)
     c = db.cursor()
     id = newGameID()
-    c.execute("INSERT INTO games VALUES('%s', '%s', '%s', '%s', '%s')" % (id, user, 0, 1, 0))
+    c.execute("INSERT INTO games VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (id, user, 0, 1, 0, total, goal, 0))
     for each in whites:
         c.execute("INSERT INTO whiteDecks VALUES('%s', '%s')" % (id, each))
     for each in blacks:
@@ -63,7 +63,12 @@ def addGame(user):
 def addPlayer(gameID, user):
     db = sqlite3.connect(f)
     c = db.cursor()
-    c.execute("INSERT INTO games VALUES('%s', '%s', '%s', '%s', '%s')" % (gameID, user, 0, 0, 0))
+    total = c.execute("SELECT * FROM games WHERE gameID = '%s'" % (gameID)).fetchall()[0][5]
+    goal = c.execute("SELECT * FROM games WHERE gameID = '%s'" % (gameID)).fetchall()[0][6]
+    c.execute("INSERT INTO games VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (gameID, user, 0, 0, 0, total, goal, 0))
+    count = c.execute("SELECT count(*) FROM games WHERE gameID = '%s'" % (each[0])).fetchall()[0][0]
+    if count == total:
+        c.execute("UPDATE games SET status = '%s' WHERE gameID = '%s'" % (1, gameID))
     db.commit()
     db.close()
 
@@ -74,7 +79,7 @@ def drawBlack(gameID,user):
     cards = c.execute("SELECT * FROM blackDecks WHERE gameID = '%s'" % (gameID)).fetchall()
     chosen = (random.choice(cards))
     c.execute("DELETE FROM blackDecks WHERE gameID = '%s' AND card = '%s'" % (chosen[0], chosen[1]))
-    c.execute("INSERT INTO cardsOnBoard VALUES ('%s', '%s', '%s')" % (gameID, user, chosen[1]))
+    c.execute("INSERT INTO cardsOnBoardBlack VALUES ('%s', '%s', '%s')" % (gameID, user, chosen[1]))
     db.commit()
     db.close()
 
@@ -94,7 +99,7 @@ def chooseCardToPlay(gameID,user,card):
     db = sqlite3.connect(f)
     c = db.cursor()
     c.execute("DELETE FROM userCards WHERE gameID = '%s' AND user = '%s' AND card = '%s'" % (gameID, user, card))
-    c.execute("INSERT INTO cardsOnBoard VALUES('%s','%s','%s')" % (gameID, user, card))
+    c.execute("INSERT INTO cardsOnBoardWhite VALUES('%s','%s','%s')" % (gameID, user, card))
     db.commit()
     db.close()
 
@@ -103,12 +108,15 @@ def chooseCardToPlay(gameID,user,card):
 def chooseWinner(gameID, card):
     db = sqlite3.connect(f)
     c = db.cursor()
-    player = c.execute("SELECT * FROM cardsOnBoard WHERE gameID = '%s' AND card = '%s'" % (gameID, card)).fetchall()[0][1]
+    player = c.execute("SELECT * FROM cardsOnBoardWhite WHERE gameID = '%s' AND card = '%s'" % (gameID, card)).fetchall()[0][1]
     score = c.execute("SELECT * FROM games WHERE gameID = '%s' AND user = '%s'" % (gameID, player)).fetchall()[0][2]
     c.execute("UPDATE games SET score = '%s' WHERE gameID = '%s' AND user = '%s'" % (score+1, gameID, player))
     c.execute("UPDATE games SET roundDone = 1 WHERE gameID = '%s'" % (gameID))
-    c.execute("DELETE FROM cardsOnBoard WHERE gameID = '%s'" % (gameID))
+    c.execute("DELETE FROM cardsOnBoardWhite WHERE gameID = '%s'" % (gameID))
+    c.execute("DELETE FROM cardsOnBoardBlack WHERE gameID = '%s'" % (gameID))
     #newDictator(gameID)
+    if gameEnded(gameID):
+        c.execute("UPDATE games SET status = '%s' WHERE gameID = '%s'" % (2, gameID))
     db.commit()
     db.close()
 
@@ -117,10 +125,10 @@ def playedCard(gameID):
     db = sqlite3.connect(f)
     c = db.cursor()
     players = c.execute("SELECT count(*) FROM games WHERE gameID = '%s'" % (gameID)).fetchall()
-    cards = c.execute("SELECT count(*) FROM cardsOnBoard WHERE gameID = '%s'" % (gameID)).fetchall()
+    cards = c.execute("SELECT count(*) FROM cardsOnBoardWhite WHERE gameID = '%s'" % (gameID)).fetchall()
     db.commit()
     db.close()
-    return players[0][0] == cards[0][0]
+    return players[0][0]-1 == cards[0][0]
 
 #sets next player as dictator
 #def newDictator(gameID):
@@ -141,7 +149,8 @@ def cardsInDeck(gameID, user):
 def gameEnded(gameID):
     db = sqlite3.connect(f)
     c = db.cursor()
-    count = c.execute("SELECT count(*) FROM games WHERE gameID = '%s' AND score = '%s'" % (gameID, 20)).fetchall()[0][0]
+    goal = c.execute("SELECT * FROM games WHERE gameID = '%s'" % (gameID)).fetchall()[0][6]
+    count = c.execute("SELECT count(*) FROM games WHERE gameID = '%s' AND score = '%s'" % (gameID, goal)).fetchall()[0][0]
     db.commit()
     db.close()
     print count
@@ -153,10 +162,11 @@ def gameEnded(gameID):
 def enoughPeople(gameID):
     db = sqlite3.connect(f)
     c = db.cursor()
+    total = c.execute("SELECT * FROM games WHERE gameID = '%s'" % (gameID)).fetchall()[0][5]
     count = c.execute("SELECT count(*) FROM games WHERE gameID = '%s'" % (gameID)).fetchall()[0][0]
     db.commit()
     db.close()
-    return count == 4
+    return count == total
 
 #checks to see if game is full
 
@@ -175,6 +185,80 @@ def winnerChosen(gameID):
     db.commit()
     db.close()
     return bool == 1
+
+#initial draw x number of cards
+
+#return all white cards on deck
+def getWhite(gameID, user):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    cards = []
+    lines = c.execute("SELECT * FROM cardsOnBoardWhite WHERE gameID = '%s' AND user = '%s'" % (gameID, user)).fetchall()
+    db.commit()
+    db.close()
+    for each in lines:
+        cards.append(each[2])
+    return cards
+
+#return all black cards on deck
+def getBlack(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    cards = []
+    lines = c.execute("SELECT * FROM cardsOnBoardBlack WHERE gameID = '%s' AND user = '%s'" % (gameID, user)).fetchall()
+    db.commit()
+    db.close()
+    for each in lines:
+        cards.append(each[2])
+    return cards
+
+def getCurrent(user):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    lines = c.execute("SELECT * FROM games WHERE user = '%s' AND status = '%s' AND status = '%s'" % (user, 0, 1)).fetchall()
+    result = []
+    for each in lines:
+        d = {}
+        d["gameID"] = each[0]
+        players = c.execute("SELECT * FROM games WHERE gameID = '%s'" % (each[0])).fetchall()
+        d["player"] = player[0][1]
+        count = c.execute("SELECT count(*) FROM games WHERE gameID = '%s'" % (each[0])).fetchall()[0][0]
+        d["current"] = count
+        d["total"] = each[5]
+        playersString = ""
+        for line in players:
+            playersString += line[1] + ", "
+        d["players"] = playersString
+        d["goal"] = each[6]
+        result.append(d)
+    db.commit()
+    db.close()
+
+#def getJoin(user):
+
+def getFinished():
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    lines = c.execute("SELECT * FROM games WHERE status = '%s'" % (user, 2)).fetchall()
+    result = []
+    for each in lines:
+        d = {}
+        d["gameID"] = each[0]
+        players = c.execute("SELECT * FROM games WHERE gameID = '%s'" % (each[0])).fetchall()
+        d["player"] = player[0][1]
+        count = c.execute("SELECT count(*) FROM games WHERE gameID = '%s'" % (each[0])).fetchall()[0][0]
+        d["current"] = count
+        d["total"] = each[5]
+        playersString = ""
+        for line in players:
+            playersString += line[1] + ", "
+        d["players"] = playersString
+        d["goal"] = each[6]
+        result.append(d)
+    db.commit()
+    db.close()
+
+#return all white cards in user's deck
     
 #addUser("Jim","password")
 #addUser("Bob","password")
@@ -191,7 +275,7 @@ def winnerChosen(gameID):
 #print cardsInDeck(0,"Bob")
 #chooseWinner(0,"A foul mouth.")
 #print winnerChosen(0)
-print enoughPeople(0)
+#print enoughPeople(0)
 db = sqlite3.connect(f)
 c = db.cursor()
 c.execute("SELECT * FROM games")
