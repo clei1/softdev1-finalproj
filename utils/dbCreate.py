@@ -21,10 +21,10 @@ def tables():
     c.execute(blackDecks)
 
     cardsOnBoardWhite = "CREATE TABLE IF NOT EXISTS cardsOnBoardWhite(gameID INTEGER, user TEXT, card TEXT)"
-    c.execute(cardsOnBoard)
+    c.execute(cardsOnBoardWhite)
 
     cardsOnBoardBlack = "CREATE TABLE IF NOT EXISTS cardsOnBoardBlack(gameID INTEGER, user TEXT, card TEXT)"
-    c.execute(cardsOnBoard)
+    c.execute(cardsOnBoardBlack)
 
     
 
