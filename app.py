@@ -53,7 +53,7 @@ def display():
 
 @my_app.route('/endTurn')
 def endTurn():
-    return (playedCard and winnerChosen)
+    return db.playedCard(request.args.get("gameID")) and db.winnerChosen(request.args.get("gameID"))
     
 @my_app.route('/drawCard')
 def drawCard():
@@ -62,5 +62,10 @@ def drawCard():
     else:
         db.drawWhite(request.args.get("gameID"), request.args.get("user"))
 
+@my_app.route('/chooseCard')
+def chooseCard():
+    db.chooseCardToPlay(request.args.get("gameID"), request.args.get("user"), request.args.get("card"))
+    return request.args.get("card")
+        
 if __name__ == '__main__':
     my_app.run(debug = True)

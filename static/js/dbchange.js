@@ -9,7 +9,23 @@ var drawCard = function( e ) {
 	    "user": user
 	      },
 	success: function(d) {
-	    //display cards in hand here
+	    //===display cards in hand here===
+	} //end success callback
+    });//end ajax call
+}; //end transmit function
+
+var chooseCard = function( e ) {
+    
+    $.ajax({
+	url: '/chooseCard',
+	type: 'GET',
+	data: {
+	    "gameID": gameID
+	    "user": user
+	    "card": card
+	      },
+	success: function(d) {
+	    //===display card chosen===
 	} //end success callback
     });//end ajax call
 }; //end transmit function
@@ -19,7 +35,7 @@ var endTurn = function( e ) {
     $.ajax({
 	url: '/endTurn',
 	type: 'GET',
-	data: {},
+	data: {"gameID": gameID},
 	success: function(d) {
 	    if (d){
 		drawCard;
