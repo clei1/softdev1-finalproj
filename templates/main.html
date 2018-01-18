@@ -8,29 +8,113 @@ lang="en"
 Main Page
 {% endblock title %}
 
+{% block scripts %}
+{{ super() }}
+{% endblock scripts %}
+
+{% block styles %}
+<link href="../static/main.css" rel="stylesheet" type="text/css">
+{% endblock styles %}
+
 {% block head %}
 {{ super() }}
 {% endblock head %}
 
+{% block bar %}
+
+<div class="barbutton">
+  <form action="/main" method="POST">
+    <button type="submit" class="button button-rounded-hover" name="game" value="current">Current Games</button>
+  </form>
+</div>
+
+<div class="barbutton">
+  <form action="/main" method="POST">
+    <button type="submit" class="button button-rounded-hover" name="game" value="join">Joinable Games</button>
+  </form>
+</div>
+
+<div class="barbutton">
+  <form action="/create" method="GET">
+    <button type="submit" class="button button-rounded-hover">Create Game</button>
+  </form>
+</div>
+
+<div class="barbutton">
+  <form action="/main" method="POST">
+    <button type="submit" class="button button-rounded-hover" name="game" value="view">Finished Games</button>
+  </form>
+</div>
+
+<div class="barbutton" id="logout">
+  <form action="/logout" method="GET">
+    <button type="submit" class="button button-rounded-hover">Log out</button>
+  </form>
+</div>
+
+{% endblock bar %}
+
 {% block content %}
+<div id="games">
+  
+  <div id="current">
+    {% for g in current %}
+    <div class="game">
+      <p>
+	<div class="title">
+	  {{ g.player }}'s Game ({{ g.current }}/{{ g.total }})
+	</div>
+	<b>Players:</b>{{ g.players }}<br>
+	<b>Goal:</b>{{ g.goal }}
+      </p>
+      <form action="/play" method="POST">
+	<button class="g"  type="submit" name="gameID" value={{ g.id }}>
+	  PLAY
+	</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
 
-{% block create %}
-<div id="create">
-  <p>Create a game!</p>
-</div>
-{% endblock create %}
+  <div id="join">
+    {% for g in join %}
+    <div class="game">
+      <p>
+	<div class="title">
+	  {{ g.player }}'s Game ({{ g.current }}/{{ g.total }})
+	</div>
+	<b>Players:</b> {{ g.players }}<br>
+	<b>Goal:</b> {{ g.goal }}
+      </p>
+      <form action="/play" method="POST">
+	<button class="g"  type="submit" name="gameID" value={{ g.id }}>
+	  JOIN
+	</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
 
-{% block join %}
-<div id="join">
-  <p>Join a game!</p>
+  <div id="finished">
+    {% for g in finished %}
+    <div class="game">
+      <p>
+	<div class="title">
+	  {{ g.player }}'s Game ({{ g.current }}/{{ g.total }})
+	</div>
+	<b>Players:</b> {{ g.players }}<br>
+	<b>Goal:</b> {{ g.goal }}
+      </p>
+      <form action="/view" method="POST">
+	<button class="g" type="submit" name="gameID" value={{ g.id }}>
+	  VIEW STATS
+	</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  
 </div>
-{% endblock join %}
-
-{% block view %}
-<div id="view">
-  <p>View finished game stats!</p>
-</div>
-{% endblock view %}
 
 {% endblock content %}
 

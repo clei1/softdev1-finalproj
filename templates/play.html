@@ -8,15 +8,56 @@ lang="en"
 Main Page
 {% endblock title %}
 
+{% block styles %}
+<LINK href="../static/play.css" rel="stylesheet" type="text/css">
+{% endblock styles %}
+
+{% block scripts %}
+{# ADD THE SCRIPT THAT GETS ELEMENTS, ADDS WHITE CARDS TO PAGE w/ getelementbyid, attachhcild something like that #}
+{% endblock scripts %}
+
 {% block head %}
 {{ super() }}
 {% endblock head %}
 
+{% block bar %}
+<div class="barbutton">
+  <form action="/main" method="GET">
+    <button type="submit">Go back</button>
+  </form>
+</div>
+{% endblock bar %}
+
 {% block content %}
 
-{% block play %}
-Playing a game
-{% endblock play %}
+<div id="status">
+  {% if not status %}Status goes here{% endif %}
+  {{ status }}
+</div>
+
+
+The black card for this round is:
+<div id="blackcard">
+  {{blackCard}}
+</div>
+
+The white cards played this round are:
+<div id="playedcards">
+  {% for c in cards %}
+  <div class="played" {% if dictator %} onclick="" {% endif %}>
+    {% if dictator or yourcard %}{{c}}{% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+Your cards:
+<div id="whitecards">
+  {% for w in whitecards %}
+  <div class="white" {% if not dictator %} onclick="" {% endif %}>
+    {{w}}
+  </div>
+  {% endfor %}
+</div>
 
 {% endblock content %}
 

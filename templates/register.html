@@ -1,12 +1,8 @@
 {% extends "layout.html" %}
 
-{% block html_attribs %}
-lang="en"
-{% endblock html_attribs %}
+{% block html_attribs %}lang="en"{% endblock html_attribs %}
 
-{% block title %}
-Login Page
-{% endblock title %}
+{% block title %}Login Page{% endblock title %}
 
 {% block head %}
 {{ super() }}
@@ -19,11 +15,11 @@ Login Page
 
 <form method = "POST" action ="/register">
   Username:
-  <input type="text" name="newUsername" required> <br><br>
+  <input type="text" name="username" required> <br><br>
   Password:
-  <input type = "password" name = "newPassword" required>  <br><br>
+  <input type = "password" name = "password" required>  <br><br>
   Confirm password:
-  <input type="password" name = "repeatPassword" required> <br> <br>
+  <input type="password" name = "repeat" required> <br> <br>
   <input type="submit" value="Register">
 </form>
 
