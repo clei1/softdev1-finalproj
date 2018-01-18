@@ -63,8 +63,8 @@ def create():
     if 'user' not in session:
         return redirect(url_for('login'))
     if request.method == 'POST':
-        addGame(session['user'])
-        return redirect(url_for())
+        addGame(session['user'], int(request.form['playerlim']), int(request.form['scorelim']))
+        return redirect(url_for('main'))
     return render_template('create.html')
 
 @my_app.route('/play', methods=['GET','POST'])
