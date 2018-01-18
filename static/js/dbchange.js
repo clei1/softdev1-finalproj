@@ -1,3 +1,16 @@
+//join is a test function
+var join = function( e ) {
+    
+    $.ajax({
+	url: '/join',
+	type: 'GET',
+	data: {},
+	success: function(d) {
+	    //===display cards in hand here===
+	} //end success callback
+    });//end ajax call
+}; //end transmit function
+
 var drawCard = function( e ) {
     
     $.ajax({
