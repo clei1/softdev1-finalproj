@@ -237,7 +237,14 @@ def getCurrent(user):
     db.close()
     return result
 
-#def getDictator(gameID, user):
+#Returns whether user is dictator
+def getDictator(gameID, user):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    count = c.execute("SELECT count(*) FROM games WHERE gameID = '%s' AND user = '%s' AND dictator = '%s'" % (gameID, user, 1)).fetchall()[0][0]
+    db.commit()
+    db.close()
+    return count > 0
 
 #Checks if given user is not in given game
 def notInGame(gameID, user):
@@ -324,6 +331,8 @@ def getFinished(user):
 #print winnerChosen(0)
 #print enoughPeople(0)
 #print getPlayerWhite(0,"Bob")
+#print getDictator(0,"Mary")
+#print getDictator(0,"Bob")
 '''print cardsInDeck(0,"Bob")
 db = sqlite3.connect(f)
 c = db.cursor()
