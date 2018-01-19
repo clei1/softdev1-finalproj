@@ -80,6 +80,27 @@ def logout():
         session.pop('user')
     return redirect(url_for('login'))
 
+@my_app.route('/endTurn')
+def endTurn():
+    return db.playedCard(request.args.get("gameID")) and db.winnerChosen(request.args.get("gameID"))
+
+@my_app.route('/drawCard')
+def drawCard():
+    if request.args.get("type") == "dictator":
+        db.drawBlack(request.args.get("gameID"), request.args.get("user"))
+    else:
+        db.drawWhite(request.args.get("gameID"), request.args.get("user"))
+                                    
+@my_app.route('/chooseCard')
+def chooseCard():
+    db.chooseCardToPlay(request.args.get("gameID"), request.args.get("user"), request.args.get("card"))
+    return request.args.get("card")
+
+@my_app.route('/chooseWin')
+def chooseWin():
+    db.chooseWinner(request.args.get("gameID"), request.args.get("card"))
+    return request.args.get("card")
+
 if __name__ == '__main__':
     my_app.run(debug = True)
 

@@ -1,12 +1,14 @@
-//join is a test function
-var join = function( e ) {
+var chooseWin = function( e ) {
     
     $.ajax({
-	url: '/join',
+	url: '/chooseWin',
 	type: 'GET',
-	data: {},
+	data: {
+	    "gameID": gameID
+	    "card": card
+	},
 	success: function(d) {
-	    //===display cards in hand here===
+	    //==display winner==
 	} //end success callback
     });//end ajax call
 }; //end transmit function
@@ -62,5 +64,5 @@ var interval = 1000 * 1; //1 second
 
 //button.addEventListener('click', transmit);
 
-setInterval(transmit, interval);
+setInterval(endTurn, interval);
 
