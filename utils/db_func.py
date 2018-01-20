@@ -237,6 +237,15 @@ def getCurrent(user):
     db.close()
     return result
 
+#Returns whether user has current game
+def hasCurrent(user):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    count = c.execute("SELECT count(*) FROM games WHERE user = '%s' AND status = '%s' OR user = '%s' AND status = '%s'" % (user, 1, user, 0)).fetchall()[0][0]
+    db.commit()
+    db.close()
+    return count > 0
+
 #Returns whether user is dictator
 def getDictator(gameID, user):
     db = sqlite3.connect(f)
@@ -281,6 +290,14 @@ def getJoin(user):
     db.commit()
     db.close()
     return result
+
+def hasJoin(user):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    result = getJoin(user)
+    db.commit()
+    db.close()
+    return len(result) > 0
 
 #Return all games that given user has finished
 def getFinished(user):
@@ -333,6 +350,8 @@ def getFinished(user):
 #print getPlayerWhite(0,"Bob")
 #print getDictator(0,"Mary")
 #print getDictator(0,"Bob")
+#print hasCurrent("Jim")
+#print hasJoin("Bob")
 '''print cardsInDeck(0,"Bob")
 db = sqlite3.connect(f)
 c = db.cursor()
