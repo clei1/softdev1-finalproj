@@ -206,12 +206,10 @@ def getBlack(gameID):
     db = sqlite3.connect(f)
     c = db.cursor()
     cards = []
-    lines = c.execute("SELECT * FROM cardsOnBoardBlack WHERE gameID = '%s'" % (gameID)).fetchall()
+    card = c.execute("SELECT * FROM cardsOnBoardBlack WHERE gameID = '%s'" % (gameID)).fetchall()
     db.commit()
     db.close()
-    for each in lines:
-        cards.append(each[2])
-    return cards
+    return card [0][2]
 
 #Returns all games given user is currently in
 def getCurrent(user):
@@ -352,6 +350,7 @@ def getFinished(user):
 #print getDictator(0,"Bob")
 #print hasCurrent("Jim")
 #print hasJoin("Bob")
+#print getBlack(0)
 '''print cardsInDeck(0,"Bob")
 db = sqlite3.connect(f)
 c = db.cursor()
