@@ -228,6 +228,7 @@ def getCurrent(user):
         playersString = ""
         for line in players:
             playersString += line[1] + ", "
+        playersString = playersString[:len(playersString)-2]
         d["players"] = playersString
         d["goal"] = each[6]
         result.append(d)
@@ -282,6 +283,7 @@ def getJoin(user):
             playersString = ""
             for line in players:
                 playersString += line[1] + ", "
+            playersString = playersString[:len(playersString)-2]
             d["players"] = playersString
             d["goal"] = each[6]
             result.append(d)
@@ -314,6 +316,7 @@ def getFinished(user):
         playersString = ""
         for line in players:
             playersString += line[1] + ", "
+        playersString = playersString[:len(playersString)-2]
         d["players"] = playersString
         d["goal"] = each[6]
         result.append(d)
@@ -359,5 +362,6 @@ data = c.fetchall()
 print(data)
 print getCurrent("Bob")
 print getFinished("Bob")
-print getJoin("Bob")'''
+print getJoin("Bob")
+'''
 
