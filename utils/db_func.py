@@ -58,6 +58,7 @@ def addGame(user, total, goal):
         c.execute("INSERT INTO blackDecks VALUES('%s', '%s')" % (id, each))
     db.commit()
     db.close()
+    drawBlack(id, user)
     drawHand(id, user)
 
 #adds user to games
