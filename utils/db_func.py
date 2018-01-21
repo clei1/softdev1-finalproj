@@ -58,6 +58,7 @@ def addGame(user, total, goal):
         c.execute("INSERT INTO blackDecks VALUES('%s', '%s')" % (id, each))
     db.commit()
     db.close()
+    drawHand(id, user)
 
 #adds user to games
 def addPlayer(gameID, user):
@@ -71,6 +72,7 @@ def addPlayer(gameID, user):
         c.execute("UPDATE games SET status = '%s' WHERE gameID = '%s'" % (1, gameID))
     db.commit()
     db.close()
+    drawHand(gameID, user)
 
 #chooses black card randomly and removes from deck; adds to cardsOnBoard
 def drawBlack(gameID,user):
@@ -130,6 +132,15 @@ def playedCard(gameID):
     db.close()
     return players[0][0]-1 == cards[0][0]
 
+#Returns true if user has played a card
+def userPlayed(gameID, user):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    count = c.execute("SELECT count(*) FROM cardsOnBoardWhite WHERE gameID = '%s' AND user = '%s'" % (gameID, user)).fetchall()[0][0]
+    db.commit()
+    db.close()
+    return count > 0
+
 #sets next player as dictator
 #def newDictator(gameID):
 
@@ -176,6 +187,11 @@ def winnerChosen(gameID):
     return bool == 1
 
 #initial draw x number of cards
+def drawHand(gameID, user):
+    i = 0
+    while i < 10:
+        drawWhite(gameID,user)
+        i  = i + 1
 
 #return all white cards on board
 def getWhite(gameID):
@@ -193,23 +209,19 @@ def getWhite(gameID):
 def getPlayerWhite(gameID, user):
     db = sqlite3.connect(f)
     c = db.cursor()
-    cards = []
-    lines = c.execute("SELECT * FROM cardsOnBoardWhite WHERE gameID = '%s' AND user = '%s'" % (gameID, user)).fetchall()
+    card = c.execute("SELECT * FROM cardsOnBoardWhite WHERE gameID = '%s' AND user = '%s'" % (gameID, user)).fetchall()
     db.commit()
     db.close()
-    for each in lines:
-        cards.append(each[2])
-    return cards
+    return card[0][2]
 
 #return all black cards on board
 def getBlack(gameID):
     db = sqlite3.connect(f)
     c = db.cursor()
-    cards = []
     card = c.execute("SELECT * FROM cardsOnBoardBlack WHERE gameID = '%s'" % (gameID)).fetchall()
     db.commit()
     db.close()
-    return card [0][2]
+    return card[0][2]
 
 #Returns all games given user is currently in
 def getCurrent(user):
@@ -246,7 +258,7 @@ def hasCurrent(user):
     return count > 0
 
 #Returns whether user is dictator
-def getDictator(gameID, user):
+def isDictator(gameID, user):
     db = sqlite3.connect(f)
     c = db.cursor()
     count = c.execute("SELECT count(*) FROM games WHERE gameID = '%s' AND user = '%s' AND dictator = '%s'" % (gameID, user, 1)).fetchall()[0][0]
@@ -347,17 +359,18 @@ def getFinished(user):
 #print cardsInDeck(0,"Bob")
 #chooseWinner(0,"Your mum.")
 #print winnerChosen(0)
-#print enoughPeople(0)
+#print enoughPeople(1)
 #print getPlayerWhite(0,"Bob")
 #print getDictator(0,"Mary")
 #print getDictator(0,"Bob")
 #print hasCurrent("Jim")
 #print hasJoin("Bob")
 #print getBlack(0)
-'''print cardsInDeck(0,"Bob")
+#print cardsInDeck(0,"Bob")
+'''
 db = sqlite3.connect(f)
 c = db.cursor()
-c.execute("SELECT * FROM cardsOnBoardWhite")
+c.execute("SELECT * FROM userCards")
 data = c.fetchall()
 print(data)
 print getCurrent("Bob")
