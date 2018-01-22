@@ -143,7 +143,16 @@ def userPlayed(gameID, user):
     return count > 0
 
 #sets next player as dictator
-#def newDictator(gameID):
+def newDictator(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    dictator = c.execute("SELECT * FROM games WHERE gameID = '%s' AND dictator = '%s'" % (gameID, 1)).fetchall()[0]
+    c.execute("DELETE FROM games WHERE gameID = '%s' AND dictator = '%s'" % (gameID, 1))
+    c.execute("INSERT INTO games VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (dictator[0], dictator[1], dictator[2], 0, dictator[4], dictator[5], dictator[6], dictator[7]))
+    newdict = c.execute("SELECT * FROM games WHERE gameID = '%s'" % (gameID)).fetchall()[0][1]
+    c.execute("UPDATE games SET dictator = '%s' WHERE gameID = '%s' AND user = '%s'" % (1, gameID, newdict))
+    db.commit()
+    db.close()
 
 #returns cards in users hand
 def cardsInDeck(gameID, user):
@@ -338,6 +347,7 @@ def getFinished(user):
     return result
 
 
+
 #addUser("Jim","password")
 #addUser("Bob","password")
 #addUser("Mary","password")
@@ -353,27 +363,30 @@ def getFinished(user):
 #drawWhite(0, "Sam")
 #drawWhite(0, "Mary")
 #drawWhite(0, "Mary")
-#chooseCardToPlay(0,"Bob","Being fabulous.")
+#chooseCardToPlay(0,"Bob","Golden showers.")
 #chooseCardToPlay(0,"Mary","A wheelchair death race.")
-#chooseCardToPlay(0,"Sam","Powerful thighs.")
+#chooseCardToPlay(0,"Sam","Fading away into nothingness.")
 #print playedCard(0)
 #print cardsInDeck(0,"Bob")
 #chooseWinner(0,"Your mum.")
 #print winnerChosen(0)
 #print enoughPeople(1)
 #print getPlayerWhite(0,"Bob")
-#print getDictator(0,"Mary")
+#newDictator(0)
+#print isDictator(0,"Jim")
+#print isDictator(0,"Mary")
 #print getDictator(0,"Bob")
 #print hasCurrent("Jim")
 #print hasJoin("Bob")
 #print getBlack(0)
 #print cardsInDeck(0,"Bob")
-'''
+
 db = sqlite3.connect(f)
 c = db.cursor()
 c.execute("SELECT * FROM userCards")
 data = c.fetchall()
 print(data)
+'''
 print getCurrent("Bob")
 print getFinished("Bob")
 print getJoin("Bob")
