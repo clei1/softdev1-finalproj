@@ -380,13 +380,12 @@ def getFinished(user):
 #print hasJoin("Bob")
 #print getBlack(0)
 #print cardsInDeck(0,"Bob")
-
+'''
 db = sqlite3.connect(f)
 c = db.cursor()
 c.execute("SELECT * FROM userCards")
 data = c.fetchall()
 print(data)
-'''
 print getCurrent("Bob")
 print getFinished("Bob")
 print getJoin("Bob")
