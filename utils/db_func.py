@@ -396,6 +396,19 @@ def removeCards(gameID):
     db.commit()
     db.close()
 
+#Gets all cards in current round
+def getAllCards(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    allCards = ""
+    cards = c.execute("SELECT * FROM currentRound WHERE gameID = '%s'" % (gameID)).fetchall()
+    for card in cards:
+        allCards += card[1] + ", "
+    allCards = allCards[:len(allCards)-2]
+    db.commit()
+    db.close()
+    return allCards
+
 #addUser("Jim","password")
 #addUser("Bob","password")
 #addUser("Mary","password")
@@ -431,7 +444,10 @@ def removeCards(gameID):
 #print cardsInDeck(0,"Bob")
 #print checkSeen(0, "Bob")
 #clearRound(0)
-#addCard(1,"YE",1)
+#addCard(1,"LOL",1)
+#addCard(0,"another",0)
+#addCard(0,"etc",0)
+#print getAllCards(1)
 #print getWinningCard(1)
 #removeCards(1)
 '''
