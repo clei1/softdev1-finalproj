@@ -1,4 +1,5 @@
 import sqlite3, random
+from operator import itemgetter
 f = "data/game.db"
 
 with open("utils/blackcards.txt") as fb:
@@ -428,6 +429,23 @@ def allSeen(gameID):
     db.close()
     return count == countb
 
+#Returns a list of dictionaries with player stats
+def getStats(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    lines = c.execute("SELECT * FROM games WHERE gameID = '%s'" % (gameID)).fetchall()
+    result = []
+    for line in lines:
+        d = {}
+        d["user"] = line[1]
+        d["score"] = line[2]
+        result.append(d)
+    newResult = sorted(result, key=itemgetter("score"), reverse = True)
+    db.commit()
+    db.close()
+    return newResult
+
+
 #addUser("Jim","password")
 #addUser("Bob","password")
 #addUser("Mary","password")
@@ -441,6 +459,7 @@ def allSeen(gameID):
 #print checkGame(0)
 #addPlayer(0, "Mary")
 #addSeen(0,"Jim")
+#print getStats(0)
 #drawBlack(0, "Jim")
 #drawWhite(0, "Bob")
 #drawWhite(0, "Bob")
@@ -448,12 +467,12 @@ def allSeen(gameID):
 #drawWhite(0, "Sam")
 #drawWhite(0, "Mary")
 #drawWhite(0, "Mary")
-#chooseCardToPlay(0,"Bob","Golden showers.")
+#chooseCardToPlay(0,"Bob","Tom Cruise.")
 #chooseCardToPlay(0,"Mary","A wheelchair death race.")
-#chooseCardToPlay(0,"Sam","Fading away into nothingness.")
+#chooseCardToPlay(0,"Sam","Mad cow disease.")
 #print playedCard(0)
 #print cardsInDeck(0,"Bob")
-#chooseWinner(0,"Your mum.")
+#chooseWinner(0,"Tom Cruise.")
 #print winnerChosen(0)
 #print enoughPeople(1)
 #print getPlayerWhite(0,"Bob")
@@ -473,10 +492,11 @@ def allSeen(gameID):
 #print getAllCards(1)
 #print getWinningCard(1)
 #removeCards(1)
+#print getStats(0)
 '''
 db = sqlite3.connect(f)
 c = db.cursor()
-c.execute("SELECT * FROM currentRound")
+c.execute("SELECT * FROM cardsOnBoardWhite")
 data = c.fetchall()
 print(data)
 print getCurrent("Bob")
