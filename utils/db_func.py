@@ -409,6 +409,25 @@ def getAllCards(gameID):
     db.close()
     return allCards
 
+#Checks if gameID is in currentRound table
+def checkGame(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    count = c.execute("SELECT count(*) FROM currentRound WHERE gameID = '%s'" % (gameID)).fetchall()[0][0]
+    db.commit()
+    db.close()
+    return count > 0
+
+#Checks if everyone in game is in seen table
+def allSeen(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    count = c.execute("SELECT count(*) FROM games WHERE gameID = '%s'" % (gameID)).fetchall()[0][0]
+    countb = c.execute("SELECT count(*) FROM seen WHERE gameID = '%s'" % (gameID)).fetchall()[0][0]
+    db.commit()
+    db.close()
+    return count == countb
+
 #addUser("Jim","password")
 #addUser("Bob","password")
 #addUser("Mary","password")
@@ -416,6 +435,10 @@ def getAllCards(gameID):
 #addGame("Jim", 3, 2)
 #addPlayer(0, "Bob")
 #addPlayer(0, "Sam")
+#addSeen(0,"Jim")
+#addSeen(0,"Mary")
+#addCard(0,"card",0)
+#print checkGame(0)
 #addPlayer(0, "Mary")
 #addSeen(0,"Jim")
 #drawBlack(0, "Jim")
