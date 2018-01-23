@@ -105,7 +105,6 @@ def chooseCardToPlay(gameID,user,card):
     c.execute("INSERT INTO cardsOnBoardWhite VALUES('%s','%s','%s')" % (gameID, user, card))
     db.commit()
     db.close()
-
     
 #given a winning card, finds player who played it, updates their score, clears cardsOnBoard for that game, calls newDictator function
 def chooseWinner(gameID, card):
@@ -346,7 +345,56 @@ def getFinished(user):
     db.close()
     return result
 
+#Adds given user to seen table
+def addSeen(gameID, user):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    numPlayers = c.execute("SELECT count(*) FROM games WHERE gameID = '%s'" % (gameID)).fetchall()[0][0]
+    c.execute("INSERT INTO seen VALUES ('%s', '%s', '%s')" % (gameID, numPlayers, user))
+    db.commit()
+    db.close()
 
+#Checks if given user is in seen table
+def checkSeen(gameID, user):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    count = c.execute("SELECT count(*) FROM seen WHERE gameID = '%s' AND user = '%s'" % (gameID, user)).fetchall()[0][0]
+    db.commit()
+    db.close()
+    return count > 0
+
+#Removes all lines with given gameID from seen table
+def clearRound(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    c.execute("DELETE FROM seen WHERE gameID = '%s'" % (gameID))
+    db.commit()
+    db.close()
+
+#Adds card to currentRound table (winning is boolean)
+def addCard(gameID, card, winning):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    c.execute("INSERT INTO currentRound VALUES ('%s', '%s', '%s')" % (gameID, card, winning))
+    db.commit()
+    db.close()
+
+#Returns the winning card in given game
+def getWinningCard(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    card = c.execute("SELECT * FROM currentRound WHERE gameID = '%s' AND winning = '%s'" % (gameID, 1)).fetchall()[0][1]
+    db.commit()
+    db.close()
+    return card
+
+#Removes all lines with given gameID from currentRound table
+def removeCards(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    c.execute("DELETE FROM currentRound WHERE gameID = '%s'" % (gameID))
+    db.commit()
+    db.close()
 
 #addUser("Jim","password")
 #addUser("Bob","password")
@@ -356,6 +404,7 @@ def getFinished(user):
 #addPlayer(0, "Bob")
 #addPlayer(0, "Sam")
 #addPlayer(0, "Mary")
+#addSeen(0,"Jim")
 #drawBlack(0, "Jim")
 #drawWhite(0, "Bob")
 #drawWhite(0, "Bob")
@@ -380,10 +429,15 @@ def getFinished(user):
 #print hasJoin("Bob")
 #print getBlack(0)
 #print cardsInDeck(0,"Bob")
+#print checkSeen(0, "Bob")
+#clearRound(0)
+#addCard(1,"YE",1)
+#print getWinningCard(1)
+#removeCards(1)
 '''
 db = sqlite3.connect(f)
 c = db.cursor()
-c.execute("SELECT * FROM userCards")
+c.execute("SELECT * FROM currentRound")
 data = c.fetchall()
 print(data)
 print getCurrent("Bob")

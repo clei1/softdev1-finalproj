@@ -26,6 +26,12 @@ def tables():
     cardsOnBoardBlack = "CREATE TABLE IF NOT EXISTS cardsOnBoardBlack(gameID INTEGER, user TEXT, card TEXT)"
     c.execute(cardsOnBoardBlack)
 
+    currentRound = "CREATE TABLE IF NOT EXISTS currentRound(gameID INTEGER, card TEXT, winning BOOLEAN)"
+    c.execute(currentRound)
+
+    seen = "CREATE TABLE IF NOT EXISTS seen(gameID INTEGER, numPlayers INTEGER,  user TEXT)"
+    c.execute(seen)
+
     
 
 tables()
