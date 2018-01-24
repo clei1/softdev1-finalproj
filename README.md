@@ -2,10 +2,10 @@
 ### Bermet Kalmakova, Connie Lei, Henry Zheng
 Cards For Humanity
 
-### Demonstration Video
+## Demonstration Video
 [Youtube [OLD LOGIN SCREEN]](https://youtu.be/VCHi5z_EZEE)
 
-### Description
+## Description
 Multiplayer Cards Against Humanity
 
 Each round, one player asks a question from a black card, and everyone else answers with their favorite white card. It's up to the Card Czar to decide whose White Card was the best. You repeat this process until one player collects the goal number of points and wins the game!
