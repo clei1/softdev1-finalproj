@@ -5,3 +5,168 @@ DEVLOG:
 
 connieL -- 2017-12-21 1:44PM
   Finished sitemap for DESIGN.pdf
+
+bermetK -- 2017-12-21 2:00PM
+  Worked on DESIGN.pdf
+
+henryZ -- 2017-12-21 2:03PM
+  Worked on DESIGN.pdf
+  
+connieL -- 2018-01-04
+  Added HTML pages in templates
+
+connieL -- 2018-01-04
+  Filled in login & register pages
+  
+bermetK -- 2018-01-07
+  Set up the database
+  Added database functions
+
+bermetK -- 2018-01-07
+  Fixed database functions
+ 
+bermetK -- 2018-01-08
+  Added more database functions
+
+bermetK -- 2018-01-08
+  Added more database functions
+
+bermetK -- 2018-01-08
+  Added more database functions
+
+bermetK -- 2018-01-08
+  Fixed bugs with database functions
+
+henryZ -- 2018-01-08
+  Added AJAX calls
+
+bermetK -- 2018-01-09
+  Added more database functions
+
+bermetK -- 2018-01-09
+  Added more database functions
+
+connieL -- 2018-01-09
+  Slightly working version in another folder because she can't use branches
+
+connieL -- 2018-01-10
+  Added the tabs that changed what games you viewed
+
+bermetK -- 2018-01-10
+  Added more database functions
+  
+bermetK -- 2018-01-10
+  Added more database functions
+  Added comments
+
+connieL -- 2018-01-10
+  Worked on displaying the game
+
+bermetK -- 2018-01-11
+  Added cards
+  Tested database functions
+  
+connieL -- 2018-01-11
+  Hardcoded stuff so that we had something to show in class
+  Some styling
+
+bermetK -- 2018-01-11
+  Worked on database functions
+
+connieL -- 2018-01-12
+  Worked on the tabs some more
+  Removed all the hardcoded, database function integration
+
+bermetK -- 2018-01-16
+  More database functions
+
+henryZ -- 2018-01-16
+  Worked on AJAX calls
+
+connieL -- 2018-01-16
+  Small changes in templates
+
+bermetK -- 2018-01-17
+  More database testing
+  Wrote more functions that returned in correct format
+
+connieL -- 2018-01-18
+  Worked on styling
+  Worked on game creation
+
+henryZ -- 2018-01-18
+  AJAX calls
+
+henryZ -- 2018-01-19
+  AJAX calls
+
+bermetK -- 2018-01-19
+  More database functions and fixes
+
+bermetK -- 2018-01-20
+  More database functions and fixes
+
+connieL -- 2018-01-20
+  Added & Debugged AJAX calls
+  Restructured some of the code
+  Tabs switched through AJAX calls instead of refreshing the page
+
+bermetK -- 2018-01-20
+  More database functions and fixes
+
+bermetK -- 2018-01-20
+  More database functions and fixes
+
+bermetK -- 2018-01-21
+  More database functions and fixes
+
+connieL -- 2018-01-21
+  Fixed little errors
+  Worked on AJAX calls
+  Worked on game updating
+  Game is displayed more correctly
+
+bermetK -- 2018-01-21
+  More database functions and fixes
+
+bermetK -- 2018-01-22
+  More database functions and fixes
+
+bermetK -- 2018-01-22
+  More database functions and fixes
+
+connieL -- 2018-01-22
+  Lots of debugging
+  Added more AJAX calls
+  Worked on game functionality
+  Make the game work until choosing card
+  Had a migraine and didn't finish
+
+bermetK -- 2018-01-22
+  More database functions and fixes
+
+bermetK -- 2018-01-22
+  More database functions and fixes
+
+bermetK -- 2018-01-23
+  More database functions and fixes
+  
+bermetK -- 2018-01-23
+  More database functions and fixes
+  
+connieL -- 2018-01-23
+  Working version!!
+  Added AJAX calls
+  Finished up game ending
+  Debugged viewing winning round
+  Change some things because setTimeout bugged everything up
+
+bermetK -- 2018-01-23
+  More database functions and fixes
+
+connieL -- 2018-01-23
+  View stats page working
+  Debugged more
+  Updated DESIGN.pdf
+  Updated devlog based on commits
+  
