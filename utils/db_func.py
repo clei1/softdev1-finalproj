@@ -401,11 +401,10 @@ def removeCards(gameID):
 def getAllCards(gameID):
     db = sqlite3.connect(f)
     c = db.cursor()
-    allCards = ""
+    allCards = []
     cards = c.execute("SELECT * FROM currentRound WHERE gameID = '%s'" % (gameID)).fetchall()
     for card in cards:
-        allCards += card[1] + ", "
-    allCards = allCards[:len(allCards)-2]
+        allCards.append(card[1])
     db.commit()
     db.close()
     return allCards
@@ -489,7 +488,7 @@ def getStats(gameID):
 #addCard(1,"LOL",1)
 #addCard(0,"another",0)
 #addCard(0,"etc",0)
-#print getAllCards(1)
+#print getAllCards(0)
 #print getWinningCard(1)
 #removeCards(1)
 #print getStats(0)
