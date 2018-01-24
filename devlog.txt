@@ -170,3 +170,7 @@ connieL -- 2018-01-23
   Updated DESIGN.pdf
   Updated devlog based on commits
   
+henryZ -- 2018-01-23
+  Cleaned up the code
+  Updated README
+  Added demonstration video
