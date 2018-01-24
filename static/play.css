@@ -19,3 +19,94 @@ body {
     font-size: larger;
     font-weight: bold;
 }
+
+#playedcards{
+    font-family: sans-serif;
+    font-size: smaller;
+}
+
+#blackcard {
+    background: rgb(35, 32,32);
+    color: white;
+    font-size: larger;
+    font-family: sans-serif;
+    width: 230px;
+    padding: 15px;
+    margin: 10px;
+    height: 230px;
+    border-radius: 5px;
+    float: left;
+}
+
+#header {
+    width: 100%;
+    height: 100%;
+    float: left;
+    font-size: smaller;
+}
+
+#bround {
+    width: 270px;
+    float: left;
+    padding-left: 15px;
+}
+
+#wround {
+    float: left;
+}
+
+.card {
+    background: white;
+    height: 120px;
+    width: 120px;
+    float: left;
+    margin-left: 5px;
+    margin-top: 5px;
+    border-radius: 3px;
+    padding: 8px;
+}
+
+#your{
+    float: left;
+    width: 100%;
+    font-size: smaller;
+    margin-left: 15px;
+}
+
+.white {
+    background: white;
+    height: 120px;
+    width: 120px;
+    float: left;
+    margin-right: 5px;
+    margin-top: 5px;
+    border-radius: 3px;
+    padding: 8px;
+}
+
+#whitecards{
+    float:left;
+    margin-left: 10px;
+    font-family: sans-serif;
+    font-size: smaller;
+}
+
+#space {
+    height: 20px;
+    width: 100%;
+    float: left;
+}
+
+#winningcard{
+    background: lightsteelblue;
+}
+
+#ending{
+    text-align: center;
+}
+
+table{
+    margin-left: 50%;
+    margin-right: 50%;
+    margin-top: 30px;
+}

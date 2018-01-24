@@ -1,35 +1,41 @@
 {% extends "layout.html" %}
-
 {% block html_attribs %}
 lang="en"
-{% endblock html_attribs %}
+{% endblock %}
 
 {% block title %}
 Login Page
-{% endblock title %}
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link href="../static/login.css" rel="stylesheet" type="text/css">
+{% endblock %}
 
 {% block head %}
 {{ super() }}
-{% endblock head %}
+{% endblock %}
 
 {% block content %}
-<h1>
-  Login
-</h1>
+<form method="POST" action="/login" class="loginform">
+  <h4 class="text-center">Login</h4>
+  <label>Username
+    <input type="text" name="username" required>
+  </label>
 
-<form method="POST" action ="/login">
-  Enter your username:<br>
-  <input type="text" name="username" required><br><br>
+  <label>Password
+    <input type="password" name="password" required>
+  </label>
 
-  Enter your password: <br>
-  <input type="password" name="password" required><br><br>
-
-  <input type="submit" value="Login"> <br> <br>
+  <p><input type="submit" class="button expanded" value="Login"></input></p>
 </form>
 
 <form method="GET" action = "/register">
-  Don't have an account?
-  <input type="submit" value = "Register">
+  <p class="text-center">
+    Don't have an account?
+    <input type="submit" class="button small" value = "Register">
+  </p>
 </form>
 
-{% endblock content %}
+{% endblock %}
+

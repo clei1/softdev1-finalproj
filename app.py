@@ -1,106 +1,309 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 from utils.db_func import *
-from utils.routing_func import *
-import os, sqlite3, hashlib
+from utils.auth_func import *
+import os, sqlite3
 
-my_app = Flask(__name__)
-my_app.secret_key = os.urandom(32)
+app = Flask(__name__)
+app.secret_key = os.urandom(32)
 
-@my_app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def root():
     return redirect(url_for('login'))
 
-@my_app.route('/login', methods=['GET','POST'])
+@app.route('/login', methods=['GET','POST'])
 def login():
-    if 'user' in session:
-        return redirect(url_for('main'))
-    if request.method == 'POST':
-        if vald():
-            session['user'] = request.form['username']
-            return redirect(url_for('main'))
-    return render_template('login.html')
-
-@my_app.route('/register', methods=['GET','POST'])
-def register():
     if loggedin():
         return redirect(url_for('main'))
     if request.method == 'POST':
-        username = request.form['username']
-        if hasUsername(username):
-            return render_template('register.html')
-        password = hashlib.md5(request.form['password'].encode()).hexdigest()
-        repeat = hashlib.md5(request.form['repeat'].encode()).hexdigest()
-        if password == repeat:
-            addUser(username, password)
+        user = request.form['username']
+        if log(user, encrypt(request.form['password'])):
+            return redirect(url_for('main'))
+        else:
+            flash('Try again.')
+    return render_template('login.html')
+
+@app.route('/logout', methods=['GET','POST'])
+def logout():
+    if loggedin():
+        session.pop('user')
+        flash('Successfully logged out.')
+    else:
+        flash('You are not logged in.')
+    return redirect(url_for('login'))
+
+@app.route('/register', methods=['GET','POST'])
+def register():
+    if loggedin():
+        flash('You already have an account.')
+        return redirect(url_for('main'))
+    if request.method == 'POST':
+        user = request.form['username']
+        if hasUsername(user):
+            flash('Username is already in use.')
+        elif request.form['password'] != request.form['repeat']:
+            flash('Passwords do not match.')
+        else:
+            password = encrypt(request.form['password'])
+            addUser(user, password)
+            flash('Successfully registered as ' + user + '.')
             return redirect(url_for('login'))
     return render_template('register.html')
 
-@my_app.route('/main', methods=['GET', 'POST'])
+@app.route('/main', methods=['GET', 'POST'])
 def main():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    c,j,f = [],[],[]
-    if "game" in request.form:
-        if request.form['game'] == 'current':
-            c = getCurrent(session['user'])
-            #c = [{"player":"Player", "current":2, "total":4, "players":"Player, hi", "goal":10 }, {"player":"hi", "current":4, "total":8, "players":"Player1, Player2, Player3, hi", "goal":17 }]
-        elif request.form['game'] == 'join':
-            j = getJoin(session['user'])
-            #j = [{"player":"Player2", "current":3, "total":5, "players":"Player2, gdfg, ter", "goal":23 }, {"player":"Player3", "current":1, "total":6, "players":"Player3"}]
-        elif request.form['game'] == 'view':
-            f = getFinished(session['user'])
-            #f = [{"player":"Player5", "current":4, "total":4, "players":"Player5, hi, yt, gf", "goal":14 }, {"player":"Player1", "current":4, "total":4, "players":"Player1, hi, gfe, as", "goal":9 }]
-    else:
-        c = getCurrent(session['user'])
-        #c = [{"player":"Player", "current":2, "total":4, "players":"Player, hi", "goal":10 }, {"player":"hi", "current":4, "total":8, "players":"Player1, Player2, Player3, hi", "goal":17 }]
-    return render_template('main.html',
-                           current=c,
-                           join=j,
-                           finished=f)
-
-@my_app.route('/create', methods=['GET','POST'])
-def create():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    if request.method == 'POST':
-        addGame(session['user'], int(request.form['playerlim']), int(request.form['scorelim']))
-        return redirect(url_for('main'))
-    return render_template('create.html')
-
-@my_app.route('/play', methods=['GET','POST'])
-def play():
-    print request.form
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    return render_template('play.html', playable = True)
-
-@my_app.route('/logout', methods=['GET','POST'])
-def logout():
-    if 'user' in session:
-        session.pop('user')
+    if loggedin():
+        user = session['user']
+        if hasCurrent(user):
+            #displays current games if user is currently part of any games
+            return render_template('main.html', user=user, current = getCurrent(user))
+        elif hasJoin(user):
+            #user has no current games
+            #displays avaliable games
+            return render_template('main.html', user=user, join = getJoin(user))
+        else:
+            #user has no current games, no avaliable games
+            #displays create game form
+            return render_template('main.html', user=user, create = True)
     return redirect(url_for('login'))
 
-@my_app.route('/endTurn')
-def endTurn():
-    return db.playedCard(request.args.get("gameID")) and db.winnerChosen(request.args.get("gameID"))
+@app.route('/create', methods=['POST'])
+def create():
+    if loggedin():
+        addGame(session['user'], int(request.form['playerlim']), int(request.form['scorelim']))
+        return redirect(url_for('main'))
+    return redirect(url_for('login'))
 
-@my_app.route('/drawCard')
-def drawCard():
-    if request.args.get("type") == "dictator":
-        db.drawBlack(request.args.get("gameID"), request.args.get("user"))
+def status(user, gameID):
+    if not enoughPeople(gameID):
+        return "Waiting for players..."
+    if isDictator(gameID, user):
+        if playedCard(gameID):
+            return "Select a winning card."
+        else:
+            return "You are the Card Czar."
     else:
-        db.drawWhite(request.args.get("gameID"), request.args.get("user"))
-                                    
-@my_app.route('/chooseCard')
-def chooseCard():
-    db.chooseCardToPlay(request.args.get("gameID"), request.args.get("user"), request.args.get("card"))
-    return request.args.get("card")
+        if not userPlayed(gameID, user):
+            return "Select a card to play."
+        else:
+            return "Waiting for players..."
 
-@my_app.route('/chooseWin')
-def chooseWin():
-    db.chooseWinner(request.args.get("gameID"), request.args.get("card"))
-    return request.args.get("card")
+@app.route('/play', methods=['POST'])
+def play():
+    if loggedin():
+        user = session['user']
+        gameID = int(request.form["gameID"])
+        if "join" in request.form and notInGame(gameID, user):
+            addPlayer(gameID, user)
+        if gameEnded(gameID):
+            #print "ending game"
+            endGame(gameID)
+            #print "endedGame: " + str(gameID)
+            flash("That game is over. Please select the view button to look at stats.")
+            #return redirect(url_for('main'))
+        st = status(user, gameID)
+        dt = isDictator(gameID, user)
+        yc = None
+        if (not dt) and userPlayed(gameID, user):
+            yc = getPlayerWhite(gameID, user)
+        return render_template('play.html', status=st, dictator=dt, blackCard=getBlack(gameID), cards=getWhite(gameID), whitecards=cardsInDeck(gameID, user), yourcard=yc, user=user, gameID=gameID, allplayed = playedCard(gameID), enoughPlayers=enoughPeople(gameID))
+    return redirect(url_for('login'))
 
+@app.route('/view', methods=['POST'])
+def view():
+    if loggedin():
+        gameID = request.form['gameID']
+        stats = getStats(gameID)
+        return render_template('view.html', stats = stats)
+
+#HELPER FUNCTIONS FOR AJAX CALLS
+#==========================================
+#helper function for gamelist
+def gameHTML(gameType, word, games):
+    join = ""
+    page = "play"
+    if gameType == "join":
+        join = '<input type="hidden" value="join" name="join"/>'
+    if gameType == "view":
+        page = "view"
+    i = "<div id='" + gameType + "'>" 
+    for g in games:
+        s="<div class='game'><p><div class='title'>%s's Game (%d/%d)</div><b>Players: </b>%s<br><b>Goal: </b>%d</p><form action='/%s' method='POST'>%s<button class='g' type='submit' name='gameID' value=%d>%s</button></form></div>" % (g['player'], g['current'], g['total'], g['players'], g['goal'], page, join, g['gameID'], word)
+        i += s;
+    if len(games) == 0:
+        i += "<p></p>"
+    i += "</div>"
+    return i
+
+def usersBoard(gameID, user):
+    allplayed = playedCard(gameID)
+    dt = isDictator(gameID, user)
+    yc = None
+    if userPlayed(gameID, user):
+        yc = getPlayerWhite(gameID, user)
+    cards = getWhite(gameID)
+    i = ""
+    for c in cards:
+        i += '<div class="card"'
+        if allplayed and dt:
+            i += 'onclick="roundCard(' + "'" + str(gameID) + "','" + c + "')"
+        i += '">'
+        if allplayed or yc == c:
+            i += c
+        i += "</div>"
+    return i
+
+def usersCard(gameID, user):
+    dt = isDictator(gameID, user)
+    played = userPlayed(gameID, user)
+    whitecards = cardsInDeck(gameID, user)
+    i = ""
+    for w in whitecards:
+        i +="<div class='white'"
+        if not played and not dt and enoughPeople(gameID):
+            i += "onclick=" + '"playCard(' + "'" + str(gameID) + "','" + w + "')" + '"'
+        i += ">" + w
+        i += "</div>"
+    return i   
+
+def winningCard(gameID, card):
+    #print "WINNING CARD FUNCTION"
+    cards = getWhite(gameID)
+    i = ""
+    for c in cards:
+        i += '<div class="card"'
+        if c == card:
+          i += 'id="winningcard"'
+          addCard(gameID, card, 1)
+        else:
+            addCard(gameID, c, 0)
+        i += '">'
+        i += c
+        i += "</div>"
+    return i
+
+def endGameDisplay(gameID):
+    stat = getStats(gameID)
+    i = "<div id='ending'><table><tr><th>User</th><th>Score</th> </tr>"
+    for s in stat:
+        i += "<tr><td>"+ s['user'] +"</td><td>"+ str(s['score']) + "</td></tr>"
+    i += "</table></div>"
+    return i
+
+#AJAX CALLS
+#==========================================
+@app.route('/gamelist', methods=['POST'])
+def gamelist():
+    user = request.form['user']
+    gameType = request.form['gameType']
+    games = None; word = None;
+    if gameType == 'current':
+        word = 'PLAY'
+        games = getCurrent(user)
+    elif gameType == 'join':
+        word = 'JOIN'
+        games = getJoin(user)
+    elif gameType == 'view':
+        word = 'VIEW STATS'
+        games = getFinished(user)
+    return gameHTML(gameType, word, games)
+
+@app.route('/playcard', methods=['POST'])
+def playCard():
+    user = session['user']
+    gameID = int(request.form['gameID'])
+    card = request.form['card']
+    chooseCardToPlay(gameID, user, card)
+    drawWhite(gameID, user)
+    return usersCard(gameID, user)
+
+@app.route('/board', methods=['POST'])
+def board():
+    user = session['user']
+    gameID = int(request.form['gameID'])
+    return usersBoard(gameID, user)
+
+@app.route('/status', methods=['POST'])
+def statusUpdate():
+    user = session['user']
+    gameID = int(request.form['gameID'])
+    return status(user, gameID)
+
+@app.route('/round', methods=['POST'])
+def roundEnd():
+    gameID = int(request.form['gameID'])
+    card = request.form['card']
+    display = winningCard(gameID, card)
+    #resets everything
+    chooseWinner(gameID, card)
+    dt = newDictator(gameID)
+    drawBlack(gameID, dt)
+    if gameEnded(gameID):
+        endGame(gameID)
+    return display
+
+@app.route('/cardupdate', methods=['POST'])
+def userUpdate():
+    gameID = int(request.form['gameID'])
+    user = session['user']
+    html = usersCard(gameID, user)
+    return html
+
+@app.route('/blackcard', methods=['POST'])
+def blackUpdate():
+    gameID = int(request.form['gameID'])
+    return getBlack(gameID)
+
+@app.route('/displayStatus', methods=['POST'])
+def displayStatus():
+    gameID = int(request.form['gameID'])
+    if not enoughPeople(gameID):
+        #print "not enough people"
+        return "not enough people"
+    if gameEnded(gameID):
+        #print "endGame"
+        return "endGame"
+    user = session['user']
+    if checkGame(gameID):
+        if checkSeen(gameID, user):
+            if allSeen(gameID):
+                clearRound(gameID)
+                removeCards(gameID)
+            return "normal"
+        else:
+            #print "winning board"
+            return "winningboard"
+    else:
+        print "normal"
+        return "normal"
+
+@app.route('/winninground', methods=['POST'])
+def winninground():
+    user = session['user']
+    gameID = int(request.form['gameID'])
+    i = ""
+    if checkGame(gameID):
+        addSeen(gameID, user)
+        card = getWinningCard(gameID)
+        cards = getAllCards(gameID)
+        for c in cards:
+            #print c
+            i += '<div class="card"'
+            if c == card:
+                i += 'id="winningcard"'
+            i += '">'
+            i += c
+            i += "</div>"
+        #print "allSeen: " + str(allSeen(gameID))
+        if allSeen(gameID):
+            clearRound(gameID)
+            removeCards(gameID)
+    return i
+
+@app.route('/endGame', methods=['POST'])
+def end():
+    gameID = int(request.form['gameID'])
+    return endGameDisplay(gameID);
+    
+#==========================================
 if __name__ == '__main__':
-    my_app.run(debug = True)
-
+    app.run(debug = True)

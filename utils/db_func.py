@@ -125,7 +125,9 @@ def chooseWinner(gameID, card):
 def endGame(gameID):
     db = sqlite3.connect(f)
     c = db.cursor()
-    c.execute("UPDATE games SET status = '%s' WHERE gameID = '%s'" % (2, gameID))
+    command = ("UPDATE games SET status = '%s' WHERE gameID = '%s'" % (2, gameID))
+    print command
+    c.execute(command)
     db.commit()
     db.close()
 

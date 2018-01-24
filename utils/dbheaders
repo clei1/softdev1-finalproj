@@ -1,0 +1,63 @@
+validate(user, password)
+-password corresponds w/ password stored in db
+
+hasUsername(username)
+-username already in use
+
+addUser(user, password)
+-create new account
+
+addGame(user, total, goal)
+-creates new game
+
+addPlayer(gameID, user)
+-adds user to game
+
+drawBlack(gameID, user)
+-black card played during this round
+
+drawWhite(gameID, user)
+-white card gets added to user's cards
+
+chooseCardToPlay(gameID, user, card)
+-takes the white card user selected and puts it on the board
+
+chooseWinner(gameID, card)
+-given a winning card, finds player who played it, updates their score, clears cardsOnBoard for that game, calls newDictator function
+
+playedCard(gameID)
+-determines if all players have played a card
+
+cardsInDeck(gameID, user)
+-user's cards
+
+gameEnded(gameID)
+-checks if game is over
+
+enoughPeople(gameID)
+-checks if there's enough people in game
+
+winnerChosen(gameID)
+-checks if winner has been chosen for the round
+
+getWhite(gameID)
+-all white cards played
+
+getPlayerWhite(gameID, user)
+-gets the player white card
+
+getBlack(gameID)
+-get black card
+
+getCurrent(user)
+-games user is currently in
+
+getJoin(user)
+-games user can join
+
+getFinished(user)
+-games user was part of and ended
+
+isDictator(gameID, user)
+notInGame(gameID, user)
+

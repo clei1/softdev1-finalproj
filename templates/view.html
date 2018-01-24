@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Finished Game
+{% endblock %}
+
+{% block styles %}
+<link href="../static/view.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block bar %}
+<div class="barbutton">
+  <form action="/main" method="GET">
+    <button type="submit">Go back</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id='ending'>
+  <table>
+    <tr>
+      <th>User</th>
+      <th>Score</th>
+    </tr>
+    {% for s in stats %}
+    <tr>
+      <td>
+	{{ s.user }}
+      </td>
+      <td>
+	{{ s.score }}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+{% endblock %}

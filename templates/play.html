@@ -2,23 +2,24 @@
 
 {% block html_attribs %}
 lang="en"
-{% endblock html_attribs %}
+{% endblock %}
 
 {% block title %}
 Main Page
-{% endblock title %}
+{% endblock %}
 
 {% block styles %}
 <LINK href="../static/play.css" rel="stylesheet" type="text/css">
-{% endblock styles %}
+{% endblock %}
 
 {% block scripts %}
-{# ADD THE SCRIPT THAT GETS ELEMENTS, ADDS WHITE CARDS TO PAGE w/ getelementbyid, attachhcild something like that #}
-{% endblock scripts %}
+{{ super() }}
+<script src="../static/js/play.js"></script>
+{% endblock %}
 
 {% block head %}
 {{ super() }}
-{% endblock head %}
+{% endblock %}
 
 {% block bar %}
 <div class="barbutton">
@@ -26,38 +27,46 @@ Main Page
     <button type="submit">Go back</button>
   </form>
 </div>
-{% endblock bar %}
+{% endblock %}
+
+{% block onload %}onclick="update('{{gameID}}')"{% endblock %}
 
 {% block content %}
-
 <div id="status">
   {% if not status %}Status goes here{% endif %}
   {{ status }}
 </div>
 
+<div id="header">
+  <div id="bround">
+    The black card for this round is:
+  </div>
+  <div id="wround">
+    The white cards played this round are:
+  </div>
+</div>
 
-The black card for this round is:
 <div id="blackcard">
   {{blackCard}}
 </div>
 
-The white cards played this round are:
 <div id="playedcards">
   {% for c in cards %}
-  <div class="played" {% if dictator %} onclick="" {% endif %}>
-    {% if dictator or yourcard %}{{c}}{% endif %}
+  <div class="card" {% if allplayed and dictator %} onclick="roundCard('{{gameID}}','{{c}}')" {% endif %}>
+    {% if allplayed or yourcard == c %}{{c}}{% endif %}
   </div>
   {% endfor %}
 </div>
-
-Your cards:
+<div id="space"></div>
+<div id="your">
+  Your cards:
+</div>
 <div id="whitecards">
   {% for w in whitecards %}
-  <div class="white" {% if not dictator %} onclick="" {% endif %}>
+  <div class="white" {% if not yourcard and not dictator and enoughPlayers %} onclick="playCard('{{gameID}}','{{w}}')" {% endif %}>
     {{w}}
   </div>
   {% endfor %}
 </div>
-
-{% endblock content %}
+{% endblock %}
 

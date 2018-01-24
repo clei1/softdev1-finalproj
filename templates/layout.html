@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
-  <head {% block html_attribs %}{% endblock html_attribs %}>
-    <title>{% block title %}{% endblock title %}</title>
+  <head class="no-js" {% block html_attribs %}{% endblock %}>
+    <title>{% block title %}{% endblock %}</title>
     {% block styles %}
-    <link rel="stylesheet" type="text/css" href="../static/foundation.css">
-    {% endblock styles %}
-    {% block scripts %}{% endblock scripts %}
+    <link rel="stylesheet" href="../static/css/foundation.css">
+    {% endblock %}
+    {% block scripts %}{% endblock %}
+    {% block head %}{% endblock %}
   </head>
 
-  <body>
+  <body {% block onload %}{% endblock %}>
+    {% set messages = get_flashed_messages() %}
+    {% for message in messages %}
+    <h3>{{message}}</h3>
+    {% endfor %}
+    
     <div id="bar">
       {% block bar %}{% endblock %}
     </div>

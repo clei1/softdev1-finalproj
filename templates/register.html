@@ -9,21 +9,23 @@
 {% endblock head %}
 
 {% block content %}
-<h1>
-  Register for an account!
-</h1>
-
-<form method = "POST" action ="/register">
-  Username:
-  <input type="text" name="username" required> <br><br>
-  Password:
-  <input type = "password" name = "password" required>  <br><br>
-  Confirm password:
-  <input type="password" name = "repeat" required> <br> <br>
-  <input type="submit" value="Register">
+<form method = "POST" action ="/register" class="loginform">
+  <h4 class="text-center">Register For An Account</h4>
+  <label>Username:
+    <input type="text" name="username" required>
+  </label>
+  
+  <label>Password:
+    <input type = "password" name = "password" required>
+  </label>
+  <label>Confirm password:
+    <input type="password" name = "repeat" required>
+  </label>
+  
+  <p><input type="submit" class="button expanded" value="Register"></p>
 </form>
 
-<form method="get" action="/">
-  <input type="submit" value="Back"><br><br>
+<form method="GET" action="/">
+  <input type="submit" class="button secondary expanded" value="Back"><br><br>
 </form>
 {% endblock content %}
