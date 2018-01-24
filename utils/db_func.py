@@ -117,9 +117,15 @@ def chooseWinner(gameID, card):
     c.execute("UPDATE games SET roundDone = 1 WHERE gameID = '%s'" % (gameID))
     c.execute("DELETE FROM cardsOnBoardWhite WHERE gameID = '%s'" % (gameID))
     c.execute("DELETE FROM cardsOnBoardBlack WHERE gameID = '%s'" % (gameID))
-    #newDictator(gameID)
-    if gameEnded(gameID):
-        c.execute("UPDATE games SET status = '%s' WHERE gameID = '%s'" % (2, gameID))
+    #if gameEnded(gameID):
+    #    c.execute("UPDATE games SET status = '%s' WHERE gameID = '%s'" % (2, gameID))
+    db.commit()
+    db.close()
+
+def endGame(gameID):
+    db = sqlite3.connect(f)
+    c = db.cursor()
+    c.execute("UPDATE games SET status = '%s' WHERE gameID = '%s'" % (2, gameID))
     db.commit()
     db.close()
 
@@ -492,14 +498,15 @@ def getStats(gameID):
 #print getWinningCard(1)
 #removeCards(1)
 #print getStats(0)
+#endGame(0)
 '''
 db = sqlite3.connect(f)
 c = db.cursor()
-c.execute("SELECT * FROM cardsOnBoardWhite")
+c.execute("SELECT * FROM games")
 data = c.fetchall()
 print(data)
 print getCurrent("Bob")
 print getFinished("Bob")
 print getJoin("Bob")
-'''
 
+'''
