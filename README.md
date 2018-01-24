@@ -49,5 +49,7 @@ Note: You might have to log out and log into other accounts repeatedly to test.
 * Play again if you'd like :)
 * Have fun!
 
-## Bugs and Issues
+## Notes
+* Safari Private Browsing works best! (Use Safari if you want to test more than two accounts at the same time)
 * Does not work in Firefox -- Tested on Chromium and Safari.
+* Chrome incognito windows saves sessions until you close all of the incognito windows.
