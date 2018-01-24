@@ -4,6 +4,7 @@ Cards For Humanity
 
 ## Demonstration Video
 [Youtube [OLD LOGIN SCREEN]](https://youtu.be/VCHi5z_EZEE)
+[Login Screenshot](https://imgur.com/sxfwsZc)
 
 ## Description
 Multiplayer Cards Against Humanity
